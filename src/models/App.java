@@ -1,6 +1,8 @@
 package models;
 import models.Rating;
 import models.Developer;
+import utils.Utilities;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,11 +102,16 @@ public abstract class App {
     }
 
     public double getAppSize() {
+
+
         return appSize;
     }
 
     public void setAppSize(double appSize) {
-        this.appSize = appSize;
+       if(Utilities.validRange(appSize, 1, 1000))
+       {
+           this.appSize = appSize;
+       }
     }
 
     public double getAppVersion() {
@@ -120,7 +127,8 @@ public abstract class App {
     }
 
     public void setAppCost(double appCost) {
-        this.appCost = appCost;
+        if (Utilities.greaterThanOrEqualTo(appCost, 0))
+        { this.appCost = appCost;}
     }
 
     public List<Rating> getRatings() {
