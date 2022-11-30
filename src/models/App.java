@@ -31,11 +31,8 @@ public abstract class App {
 
     public String appSummary()
     {
-        String text ="";
-        Developer developer = getDeveloper();
-        String name = developer.getDeveloperName();
-        text = getAppName() + getAppVersion() + name + getAppCost();
-       return text;
+        return getAppName() + "(V" + getAppVersion() + " by "+ developer.toString()+ ", €"+ getAppCost()+ " Rating: " + calculateRating();
+
 
     }
     public boolean addRating(Rating rating)
@@ -102,8 +99,6 @@ public abstract class App {
     }
 
     public double getAppSize() {
-
-
         return appSize;
     }
 
@@ -119,7 +114,8 @@ public abstract class App {
     }
 
     public void setAppVersion(double appVersion) {
-        this.appVersion = appVersion;
+        if (Utilities.greaterThanOrEqualTo(appVersion, 1))
+        {this.appVersion = appVersion;}
     }
 
     public double getAppCost() {
@@ -137,14 +133,8 @@ public abstract class App {
 
     @Override
     public String toString() {
-        return "App{" +
-                "appName='" + appName + '\'' +
-                ", appSize=" + appSize +
-                ", appVersion=" + appVersion +
-                ", appCost=" + appCost +
-                ", developer=" + developer.toString() +
-                ", ratings=" + ratings.toString() +
-                '}';
+        return getAppName()+" (Version "+ getAppVersion()+") "+developer.toString()+ " "+ getAppSize()+"MB"+ " Cost: "+getAppCost()+" Ratings ("+ calculateRating()+")"+getRatings();
+
     }
 
 

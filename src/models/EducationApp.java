@@ -1,4 +1,7 @@
 package models;
+
+import utils.Utilities;
+
 public class EducationApp extends App {
 
     int level = 0;
@@ -13,12 +16,13 @@ public class EducationApp extends App {
     }
 
     public void setLevel(int level) {
-        this.level = level;
+        if (Utilities.validRange(level, 1,10))
+        {this.level = level;}
     }
 
     @Override
     public boolean isRecommendedApp() {
-       if(getAppCost() >0.99 && calculateRating()>=3.50 && getLevel()>3)
+       if((super.getAppCost()> 0.99) && (super.calculateRating()>= 3.50 )&&(getLevel()>=3))
        {
            return true;
        }
@@ -30,12 +34,12 @@ public class EducationApp extends App {
 
     public String appSummary()
     {
-        return super.appSummary()+getLevel();
+        return super.appSummary()+" level "+ getLevel();
     }
 
     public String toString()
     {
-        return super.toString()+getLevel();
+        return super.toString()+" Level: "+getLevel();
     }
 
 
