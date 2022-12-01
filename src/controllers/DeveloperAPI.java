@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DeveloperAPI {
 
-    //TODO Nothing!  The DeveloperAPI class is completed! All you have to do here is implemment the ISerializer interface
+    //TODO The DeveloperAPI class is completed! All you have to do here is implemment the ISerializer interface
 
     private List<Developer> developers = new ArrayList<>();
 

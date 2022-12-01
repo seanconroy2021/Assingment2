@@ -199,9 +199,9 @@ void setUp()
         }
 
         @Test
-        void appIsNotRecommendedWhenRatingIsLessThan3AndAHalf() {
+        void appIsNotRecommendedWhenRatingIsLessThan1() {
             //setting all conditions to true with ratings of 3 and 3 (i.e. 3.0)
-            ProductivityApp prApp = setupProductivityAppWithRating(3, 3);
+            ProductivityApp prApp = setupProductivityAppWithRating(1, 1);
             //verifying recommended app returns false (rating not high enough
             assertFalse(prApp.isRecommendedApp());
         }
@@ -229,13 +229,13 @@ void setUp()
     ProductivityApp setupProductivityAppWithRating(int rating1, int rating2) {
         //setting all conditions to true
         ProductivityApp prApp = new ProductivityApp(developerLego, "WeDo", 1,
-                1.0, 1.00);
+                1.0, 2.00);
         prApp.addRating(new Rating(rating1, "John Doe", "Very Good"));
         prApp.addRating(new Rating(rating2, "Jane Doe", "Excellent"));
 
         //verifying all conditions are true for a recommended educational app]
         assertEquals(2, prApp.getRatings().size());  //two ratings are added
-        assertEquals(1.0, prApp.getAppCost(), 0.01);
+        assertEquals(2.0, prApp.getAppCost(), 0.01);
         assertEquals(((rating1 + rating2) / 2.0), prApp.calculateRating(), 0.01);
         return prApp;
     }

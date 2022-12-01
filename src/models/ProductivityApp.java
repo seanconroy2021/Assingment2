@@ -8,7 +8,7 @@ public class ProductivityApp extends App {
 
     @Override
     public boolean isRecommendedApp() {
-        if((super.getAppCost()>= 1.99) && (super.calculateRating()>= 3 ))
+        if((super.getAppCost()>= 1.99) && (super.calculateRating()> 3.0 ))
         {
             return true;
         }
