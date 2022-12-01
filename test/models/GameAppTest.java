@@ -135,35 +135,117 @@ public class GameAppTest {
             assertEquals(1.0, gaAppBelowBoundary.getAppVersion()); //update
         }
 
+//        @Test
+//        void setAppCost() {
+//            //Validation: appCost(>=0)
+//            assertEquals(0.0, gaAppBelowBoundary.getAppCost());
+//
+//            gaAppBelowBoundary.setAppCost(1.0);
+//            assertEquals(1.0, gaAppBelowBoundary.getAppCost()); //update
+//
+//            gaAppBelowBoundary.setAppCost(-1);
+//            assertEquals(1.0, gaAppBelowBoundary.getAppCost()); //no update
+//
+//            gaAppBelowBoundary.setAppCost(0.0);
+//            assertEquals(0.0, gaAppBelowBoundary.getAppCost()); //update
+//        }
+
+
+
+    }
+
+    @Nested // mutiple test in the one class.
+    class ObjectStateMethods {
+
         @Test
-        void setAppCost() {
-            //Validation: appCost(>=0)
-            assertEquals(0.0, gaAppBelowBoundary.getAppCost());
+        void appSummaryReturnsCorrectString() {
+            EducationApp edApp = setupEducationAppWithRating(3, 4);
+            String stringContents = edApp.appSummary();
 
-            gaAppBelowBoundary.setAppCost(1.0);
-            assertEquals(1.0, gaAppBelowBoundary.getAppCost()); //update
-
-            gaAppBelowBoundary.setAppCost(-1);
-            assertEquals(1.0, gaAppBelowBoundary.getAppCost()); //no update
-
-            gaAppBelowBoundary.setAppCost(0.0);
-            assertEquals(0.0, gaAppBelowBoundary.getAppCost()); //update
+            assertTrue(stringContents.contains("level " + edApp.getLevel()));
+            assertTrue(stringContents.contains(edApp.getAppName() + "(V" + edApp.getAppVersion()));
+            assertTrue(stringContents.contains(edApp.getDeveloper().toString()));
+            assertTrue(stringContents.contains("€" + edApp.getAppCost()));
+            assertTrue(stringContents.contains("Rating: " + edApp.calculateRating()));
         }
 
         @Test
-        void setMultiplayer() {
-            assertEquals(false, gaAppBelowBoundary.setMultiplayer(false));
+        void toStringReturnsCorrectString() {
+            EducationApp edApp = setupEducationAppWithRating(3, 4);
+            String stringContents = edApp.toString();
 
-            gaAppBelowBoundary.setAppCost(1.0);
-            assertEquals(1.0, gaAppBelowBoundary.getAppCost()); //update
+            assertTrue(stringContents.contains(edApp.getAppName()));
+            assertTrue(stringContents.contains("(Version " + edApp.getAppVersion()));
+            assertTrue(stringContents.contains(edApp.getDeveloper().toString()));
+            assertTrue(stringContents.contains(edApp.getAppSize() + "MB"));
+            assertTrue(stringContents.contains("Cost: " + edApp.getAppCost()));
+            assertTrue(stringContents.contains("Level: " + edApp.getLevel()));
+            assertTrue(stringContents.contains("Ratings (" + edApp.calculateRating()));
 
-            gaAppBelowBoundary.setAppCost(-1);
-            assertEquals(1.0, gaAppBelowBoundary.getAppCost()); //no update
-
-            gaAppBelowBoundary.setAppCost(0.0);
-            assertEquals(0.0, gaAppBelowBoundary.getAppCost()); //update
-
+            //contains list of ratings too
+            assertTrue(stringContents.contains("John Doe"));
+            assertTrue(stringContents.contains("Very Good"));
+            assertTrue(stringContents.contains("Jane Doe"));
+            assertTrue(stringContents.contains("Excellent"));
         }
 
     }
+
+    @Nested
+    class RecommendedApp {
+
+        @Test
+        void appIsNotRecommendedWhenInAppCostIs99c() {
+            //setting all conditions to true with ratings of 3 and 4 (i.e. 3.5)
+            EducationApp edApp = setupEducationAppWithRating(1, 2);
+
+            //now setting appCost to 0.99 so app should not be recommended now
+            edApp.setAppCost(0.99);
+            assertFalse(edApp.isRecommendedApp());
+        }
+
+        @Test
+        void appIsNotRecommendedWhenRatingIsLessThan3AndAHalf() {
+            //setting all conditions to true with ratings of 3 and 3 (i.e. 3.0)
+            GameApp gaApp  =setupGamingAppWithRating(3, 3);
+            //verifying recommended app returns false (rating not high enough
+            assertFalse(gaApp.isRecommendedApp());
+        }
+
+        @Test
+        void appIsNotRecommendedWhenNoRatingsExist() {
+            //setting all conditions to true with no ratings
+            GameApp gaApp  = new GameApp(developerLego, "WeDo", 1,
+                    1.0, 1.00,  true);
+            //verifying recommended app returns true
+            assertFalse(gaApp.isRecommendedApp());
+        }
+
+        @Test
+        void appIsRecommendedWhenAllOfTheConditionsAreTrue() {
+            //setting all conditions to true with ratings of 3 and 4 (i.e. 3.5)
+            GameApp gaApp = setupGamingAppWithRating(3, 4);
+
+            //verifying recommended app returns true
+            assertTrue(gaApp.isRecommendedApp());
+        }
+
+    }
+
+    GameApp setupGamingAppWithRating(int rating1, int rating2) {
+        //setting all conditions to true
+        GameApp gaApp = new GameApp(developerLego, "WeDo", 1,
+                1.0, 1.00,  true);
+        gaApp.addRating(new Rating(rating1, "John Doe", "Very Good"));
+        gaApp.addRating(new Rating(rating2, "Jane Doe", "Excellent"));
+
+        //verifying all conditions are true for a recommended gaming app
+        assertEquals(2, gaApp.getRatings().size());  //two ratings are added
+        assertEquals(((rating1 + rating2) / 2.0), gaApp.calculateRating(), 0.01);
+        assertTrue(gaApp.isMultiplayer());
+
+        return gaApp;
+    }
+
+
 }
