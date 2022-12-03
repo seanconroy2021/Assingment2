@@ -31,14 +31,82 @@ public class AppStoreAPI {
         }
     }
 
+    /**
+     *
+     * @param appName
+     * @return
+     */
+    public App getAppByName(String appName)
+    {
+        if (isValidAppName(appName))
+        {
+            for (App app : apps)
+            {
+                if (app.getAppName().toLowerCase().contains(appName.toLowerCase())) {
+                    return app;
+                }
+            }
+        }
+
+       return null;
+    }
+
+    /**
+     *
+     * @param index
+     * @return
+     */
+    public App getAppByIndex(int index)
+    {
+        if(isValidIndex(index)) {return  apps.get(index);}
+        else {return null;}
+    }
+
     //---------------------
     // Validation methods
     //---------------------
 
+    /**
+     * This method takes in a number and checks if it is a valid index in the app ArrayList.
+     *
+     * @param index A number representing a potential index in the ArrayList.
+     * @return True of the index number passed is a valid index in the ArrayList, false otherwise.
+     */
     public boolean isValidIndex(int index) {
         return (index >= 0) && (index < apps.size());
 
     }
+
+
+    /**
+     * This method check to see if the app  is in the system by the app name.
+     * send in parameter String of app looking for and if found in the arraylist true is sent back else false.
+     * @param appName A app name representing a potential app name in the arraylist.
+     * @return true if the app name is found, false otherwise.
+     */
+    public boolean isValidAppName(String appName)
+    {
+        for (App app : apps)
+        {
+            if (app.getAppName().toLowerCase().contains(appName.toLowerCase()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * This will get the number of apps in the arraylist and return it in int.
+     * @return The number of apps in the arraylist in int.
+     */
+    public int numberOfApps()
+    {
+        return apps.size();
+    }
+
+
 
     /**
      *  Add the app object, passed as a parameter, to the ArrayList
@@ -218,7 +286,7 @@ public class AppStoreAPI {
         }
         else
         {
-            return listOfProductivityApps;
+            return listOfProductivityApps;///?
         }
     }
 
@@ -296,6 +364,12 @@ public class AppStoreAPI {
         }
     }
 
+    /**
+     *It builds  a string of all the recommended app in the system and return it.
+     *
+     * @return Build a string containing all the recommended apps and return it.
+     * If there is no apps in the system "no apps in the system" or if there is no recommended apps it will return "No recommended apps".
+     */
     public String listAllRecommendedApps()
     {
         String allRecommendedApps="";
@@ -322,6 +396,41 @@ public class AppStoreAPI {
         else
         {
             return allRecommendedApps;
+        }
+
+    }
+
+    /**
+     * It build a string of all the apps with the developer matching and return it
+     * @param developer Is a a
+     * @return
+     */
+    public String  listAllAppsByChosenDeveloper(Developer developer)
+    {
+        String appsByDev="";
+        if(apps.isEmpty())
+        {
+            return "no apps in the system";
+        }
+        else
+        {
+            for (App app : apps)
+            {
+                if (app.getDeveloper().equals(developer))//toDo devloper make check if correct
+                {
+                    int index = apps.indexOf(app);
+                    appsByDev += index +": " + app.toString();
+                }
+            }
+        }
+
+        if (appsByDev.equals(""))
+        {
+            return "No apps for developer: "+ developer;
+        }
+        else
+        {
+            return appsByDev;
         }
 
     }
