@@ -66,7 +66,7 @@ public abstract class App {
        for (Rating rating: ratings)
        {
            double stars = rating.getNumberOfStars();
-           if (!(stars ==0))
+           if ((stars >0))
            {
                starAmount += stars;
                count++;

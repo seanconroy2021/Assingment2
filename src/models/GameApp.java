@@ -8,10 +8,12 @@ public class GameApp extends App {
 
     public GameApp(Developer developer, String appName, double appSize, double appVersion, double appCost, boolean isMultiplayer) {
         super(developer, appName, appSize, appVersion, appCost);
+        this.isMultiplayer = isMultiplayer;
     }
 
 
     public boolean isMultiplayer() {
+        System.out.println("this is the multiplayer "+ isMultiplayer);
         return isMultiplayer;
     }
 
@@ -21,7 +23,7 @@ public class GameApp extends App {
 
     @Override
     public boolean isRecommendedApp() {
-        if (( isMultiplayer()== true ) && (super.calculateRating() > 4.0)) {
+        if (( isMultiplayer()== true ) && (super.calculateRating() >= 4.0)) {
             return true;
         } else {
             return false;
@@ -30,12 +32,12 @@ public class GameApp extends App {
 
     public String appSummary()
     {
-        return super.appSummary()+" Multiplayer "+ Utilities.booleanToYN(isMultiplayer());
+        return super.appSummary()+" Multiplayer "+ Utilities.booleanToYN(isMultiplayer);
     }
 
     public String toString()
     {
-        return super.toString()+" Multiplayer: "+ Utilities.booleanToYN(isMultiplayer());
+        return super.toString()+" Multiplayer "+ Utilities.booleanToYN(isMultiplayer());
     }
 
 }
