@@ -296,7 +296,36 @@ public class AppStoreAPI {
         }
     }
 
-    
+    public String listAllRecommendedApps()
+    {
+        String allRecommendedApps="";
+        if(apps.isEmpty())
+        {
+            return "no apps in the system";
+        }
+        else
+        {
+            for (App app : apps)
+            {
+                if(app.isRecommendedApp())
+                {
+                    int index = apps.indexOf(app);
+                    allRecommendedApps += index +": " + app.toString();
+                }
+            }
+        }
+
+        if(allRecommendedApps.equals(""))
+        {
+            return "No recommended apps";
+        }
+        else
+        {
+            return allRecommendedApps;
+        }
+
+    }
+
 
 
 
