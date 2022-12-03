@@ -115,7 +115,7 @@ public class AppStoreAPI {
      * @return A String containing all the game app  in the ArrayList, or  "No apps in the system",or "no game apps in the system"
      *
      */
-    public String  listAllGamesApp()
+    public String  listAllGameApps()
     {
         String listOfGameApps ="";
         if(apps.isEmpty())
@@ -143,6 +143,162 @@ public class AppStoreAPI {
             return listOfGameApps;
         }
     }
+
+    /**
+     * This method builds and returns a String containing all education apps in the ArrayList.
+     * For each education app  stored, the associated index number is included.
+     * If no apps  are stored in the ArrayList, the String "No apps in the system" is returned.
+     * If no education app are stored in the ArrayList, the String "no education apps in the system".
+     *
+     * @return A String containing all the education app  in the ArrayList, or  "No apps in the system",or "no education apps in the system"
+     *
+     */
+
+    public String  listAllEducationApps()
+    {
+        String listOfEducationApps ="";
+        if(apps.isEmpty())
+        {
+            return "no apps in the system";
+        }
+        else
+        {
+            for (App app : apps)
+            {
+                if(app instanceof EducationApp)
+                {
+                    int index = apps.indexOf(app);
+                    listOfEducationApps += index +": " + app.toString();
+                }
+            }
+        }
+
+        if(listOfEducationApps.equals(""))
+        {
+            return "no education apps in the system";
+        }
+        else
+        {
+            return listOfEducationApps;
+        }
+    }
+
+    /**
+     * This method builds and returns a String containing all productivity apps in the ArrayList.
+     * For each productivity app  stored, the associated index number is included.
+     * If no apps  are stored in the ArrayList, the String "No apps in the system" is returned.
+     * If no productivity app are stored in the ArrayList, the String "no productivity apps in the system".
+     *
+     * @return A String containing all the productivity  app  in the ArrayList, or  "No apps in the system",or "no productivity apps in the system"
+     *
+     */
+
+    public String  listAllProductivityApps()
+    {
+        String listOfProductivityApps ="";
+        if(apps.isEmpty())
+        {
+            return "no apps in the system";
+        }
+        else
+        {
+            for (App app : apps)
+            {
+                if(app instanceof ProductivityApp)
+                {
+                    int index = apps.indexOf(app);
+                    listOfProductivityApps += index +": " + app.toString();
+                }
+            }
+        }
+
+        if(listOfProductivityApps.equals(""))
+        {
+            return "no productivity apps in the system";
+        }
+        else
+        {
+            return listOfProductivityApps;
+        }
+    }
+
+    /**
+     * It searches for an app by app name . A String searchString is sent in as a parameter
+     * @param searchString A String searchString is sent in as parameter & what looking for in
+     * the app name in the arrayList.
+     * @return If the app is found by app name a String is built up with all the app that contain the searchString, and it is returned.
+     * if there is no apps in the system "no apps in the system" or if no apps match the searchString "No apps found for" + searchString is sent back.
+     *
+     */
+    public String listAllAppsByName(String searchString)
+    {
+        String foundApp = "";
+        if(apps.isEmpty())
+        {
+            return "no apps in the system";
+        }
+        else
+        {
+            for (App app : apps)
+            {
+                if(app.getAppName().toLowerCase().contains(searchString.toLowerCase()))
+                {
+                    foundApp += app.toString();
+                }
+            }
+        }
+
+        if (foundApp.equals("")) {
+            return "No apps found for" + ": " + searchString;
+        }
+        else
+        {
+            return foundApp;
+        }
+
+    }
+
+    /**
+     * It searches for app that have a rating which is sent in as a parameter that equal or above and add it to a built up string
+     * and returned. If no apps in the system "no apps in the system" is returned or if no app what that rating "No apps have a rating of " +rating+" or above"
+     * is sent back.
+     * @param rating A int is sent in as a parameter & if the rating is the equal or above the app it added to the string.
+     *
+     * @return A string of all the app that match that rating is sent back or "no app in the system".
+     *If no apps have that rating "No apps have a rating of " +rating+" or above" is returned.
+     */
+    public  String listAllAppsAboveOrEqualAGivenStarRating( int rating )
+    {
+        String ratingList="";
+        if(apps.isEmpty())
+        {
+            return "no apps in the system";
+        }
+        else
+        {
+            for (App app : apps)
+            {
+                if(app.calculateRating()>= rating ) //  check do i use uilties.
+                {
+                    int index = apps.indexOf(app);
+                    ratingList += index +": " + app.toString();
+                }
+            }
+        }
+
+        if (ratingList.equals(""))
+        {
+            return "No apps have a rating of " +rating+" or above";
+        }
+        else
+        {
+            return ratingList;
+        }
+    }
+
+    
+
+
 
 
 
