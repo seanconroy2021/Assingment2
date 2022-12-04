@@ -52,9 +52,9 @@ public class AppStoreAPI {
     }
 
     /**
-     *
-     * @param index
-     * @return
+     *This finds the app in the arraylist by the index sent In. If app is found the App object is sent back else null
+     * @param index It is a int parameter which is sent in to find the app that matches the index.
+     * @return If index is valid and matches an app in the arraylist it is sent back else null.
      */
     public App getAppByIndex(int index)
     {
@@ -402,8 +402,9 @@ public class AppStoreAPI {
 
     /**
      * It build a string of all the apps with the developer matching and return it
-     * @param developer Is a a
-     * @return
+     * @param developer It is object Developer that is sent in.
+     * @return Build a string that contains all the apps by the developer and return it.
+     * If there is no qpps "no apps in the system" or if there is no app found from the developer "No apps for developer: " developer is returned.
      */
     public String  listAllAppsByChosenDeveloper(Developer developer)
     {
