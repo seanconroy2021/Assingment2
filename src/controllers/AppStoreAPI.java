@@ -11,15 +11,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static java.lang.Math.random;
 import static utils.RatingUtility.generateRandomRating;
 
-public class AppStoreAPI {
+public class AppStoreAPI implements ISerializer {
 
     private List<App> apps = new ArrayList<App>();
 
-    //TODO refer to the spec and add in the required methods here (make note of which methods are given to you first!)
 
 
     // Method to simulate ratings (using the RatingUtility).
@@ -118,6 +118,23 @@ public class AppStoreAPI {
         return apps.add(app);
     }
 
+    /**
+     * Delete a app from the ArrayList, if it exists, at the index passed as a parameter.
+     *
+     * @param index Index of the App object in the ArrayList
+     * @return The deleted App object or null if no object is at the index location
+     */
+    public App deleteAppByIndex(int index)
+    {
+        if (isValidIndex(index))
+        {
+           return  apps.remove(index);
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     /**
      * This method builds and returns a String containing all the app in the ArrayList.
@@ -436,29 +453,82 @@ public class AppStoreAPI {
 
     }
 
+    /**
+     * It will count the number of app by a chosen developer. It will take in object Developer and compare it to each app in the arraylist.
+     * It will add 1 each time developer matches the app developer sent in.
+     * @param developer  It is object Developer that is sent in.
+     * @return It will add up all the app matching in int type and send it back else if no apps matches or app is empty send back 0.
+     */
+    public int numberOfAppsByChosenDeveloper(Developer developer)
+    {
+        int count = 0;
+        if(apps.isEmpty())
+        {
+            return 0;
+        }
+        else
+        {
+            for (App app : apps)
+            {
+                if (app.getDeveloper().equals(developer))//toDo devloper make check if correct
+                {
+                   count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * This method will find a random app in the arrayList and send it back as App object.
+     * @return An app object is sent back or null if app arraylist is empty.
+     */
+    public App randomApp()
+    {
+        if(apps.isEmpty())
+        {
+            return null;
+        }
+        else
+        {
+            //https://java2blog.com/generate-random-number-between-1-and-100-java/
+            Random randIndex = new Random();
+            int randomIndex = randIndex.ints(0, apps.size()).findAny().getAsInt();
+            return apps.get(randomIndex);
+        }
+    }
 
 
+    //------------ sorting method ------------//
+    public void sortAppsByNameAscending() //TODO
+    {
+        for (int i = apps.size() -1; i >= 0; i--)
+        {
+            int highestIndex = 0;
+            for (int j = 0; j <= i; j++)
+            {
+                if (apps.get(j).getAppName().compareTo(apps.get(highestIndex).getAppName()) > 0) {
+                    highestIndex = j;
+                }
+            }
+            //swapApps(apps, i, highestIndex);//todo
 
+        }
+    }
 
+    private void swapApps (ArrayList<App> apps, int i, int j)
+    {
+        App smaller = apps.get(i);
+        App bigger = apps.get(j);
 
+        apps.set(i,bigger);
+        apps.set(j, smaller);
 
-
-
-
-
-
-
-
-
-
-
+    }
 
     //---------------------
     // Persistence methods
     //---------------------
-    // TODO UNCOMMENT THIS COMPLETED CODE block as you start working through this class
-    //---------------------
-    /*
     @SuppressWarnings("unchecked")
     public void load() throws Exception {
         //list of classes that you wish to include in the serialisation, separated by a comma
@@ -485,5 +555,4 @@ public class AppStoreAPI {
     public String fileName(){
         return "apps.xml";
     }
-    */
 }

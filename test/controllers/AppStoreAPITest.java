@@ -148,38 +148,38 @@ public class AppStoreAPITest {
 
     }
 
-////    @Nested
-////    class SortingMethods {
-////
-////        @Test
-////        void sortByNameAscendingReOrdersList() {
-////            assertEquals(7, appStore.numberOfApps());
-////            //checks the order of the objects in the list
-////            assertEquals(edAppBelowBoundary, appStore.getAppByIndex(0));
-////            assertEquals(prodAppOnBoundary, appStore.getAppByIndex(1));
-////            assertEquals(gameAppAboveBoundary, appStore.getAppByIndex(2));
-////            assertEquals(prodAppBelowBoundary, appStore.getAppByIndex(3));
-////            assertEquals(edAppAboveBoundary, appStore.getAppByIndex(4));
-////            assertEquals(prodAppInvalidData, appStore.getAppByIndex(5));
-////            assertEquals(gameAppOnBoundary, appStore.getAppByIndex(6));
-////
-////            appStore.sortAppsByNameAscending();
-////            assertEquals(prodAppInvalidData, appStore.getAppByIndex(0));
-////            assertEquals(gameAppOnBoundary, appStore.getAppByIndex(1));
-////            assertEquals(edAppAboveBoundary, appStore.getAppByIndex(2));
-////            assertEquals(gameAppAboveBoundary, appStore.getAppByIndex(3));
-////            assertEquals(prodAppBelowBoundary, appStore.getAppByIndex(4));
-////            assertEquals(prodAppOnBoundary, appStore.getAppByIndex(5));
-////            assertEquals(edAppBelowBoundary, appStore.getAppByIndex(6));
-////        }
-//
-//        @Test
-//        void sortByNameAscendingDoesntCrashWhenListIsEmpty() {
-//            assertEquals(0,emptyAppStore.numberOfApps());
-//            emptyAppStore.sortAppsByNameAscending();
-//        }
-//
-//    }
+    @Nested
+    class SortingMethods {
+
+        @Test
+        void sortByNameAscendingReOrdersList() {
+            assertEquals(7, appStore.numberOfApps());
+            //checks the order of the objects in the list
+            assertEquals(edAppBelowBoundary, appStore.getAppByIndex(0));
+            assertEquals(prodAppOnBoundary, appStore.getAppByIndex(1));
+            assertEquals(gameAppAboveBoundary, appStore.getAppByIndex(2));
+            assertEquals(prodAppBelowBoundary, appStore.getAppByIndex(3));
+            assertEquals(edAppAboveBoundary, appStore.getAppByIndex(4));
+            assertEquals(prodAppInvalidData, appStore.getAppByIndex(5));
+            assertEquals(gameAppOnBoundary, appStore.getAppByIndex(6));
+
+            appStore.sortAppsByNameAscending();
+            assertEquals(prodAppInvalidData, appStore.getAppByIndex(0));
+            assertEquals(gameAppOnBoundary, appStore.getAppByIndex(1));
+            assertEquals(edAppAboveBoundary, appStore.getAppByIndex(2));
+            assertEquals(gameAppAboveBoundary, appStore.getAppByIndex(3));
+            assertEquals(prodAppBelowBoundary, appStore.getAppByIndex(4));
+            assertEquals(prodAppOnBoundary, appStore.getAppByIndex(5));
+            assertEquals(edAppBelowBoundary, appStore.getAppByIndex(6));
+        }
+
+        @Test
+        void sortByNameAscendingDoesntCrashWhenListIsEmpty() {
+            assertEquals(0,emptyAppStore.numberOfApps());
+            emptyAppStore.sortAppsByNameAscending();
+        }
+
+    }
 
     //--------------------------------------------
     // Helper Methods
