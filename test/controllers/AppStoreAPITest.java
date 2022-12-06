@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AppStoreAPITest {
 
@@ -57,14 +58,22 @@ public class AppStoreAPITest {
 
         gameAppInvalidData = new GameApp(developerKoolGames, "", -1, 0,  -1.00,  true);
 
+
+
         //not included - edAppOnBoundary, edAppInvalidData, prodAppBelowBoundary, gameAppBelowBoundary, gameAppInvalidData.
-        appStore.addApp(edAppBelowBoundary);
-        appStore.addApp(prodAppOnBoundary);
-        appStore.addApp(gameAppAboveBoundary);
-        appStore.addApp(prodAppBelowBoundary);
-        appStore.addApp(edAppAboveBoundary);
-        appStore.addApp(prodAppInvalidData);
-        appStore.addApp(gameAppOnBoundary);
+        appStore.addApp(edAppBelowBoundary);//1
+        appStore.addApp(prodAppOnBoundary);//2
+        appStore.addApp(gameAppAboveBoundary);//3
+        appStore.addApp(prodAppBelowBoundary);//4
+        appStore.addApp(edAppAboveBoundary);//5
+        appStore.addApp(prodAppInvalidData);//6
+        appStore.addApp(gameAppOnBoundary);//7
+        appStore.addApp(edAppOnBoundary);//8
+        appStore.addApp(edAppInvalidData);//9
+        appStore.addApp(gameAppBelowBoundary);//10
+        appStore.addApp(gameAppInvalidData); // 11 app in the list
+
+
     }
 
     @AfterEach
@@ -78,11 +87,103 @@ public class AppStoreAPITest {
 
     @Nested
     class GettersAndSetters {
+        @Nested
+        class getters
+        {
+            @Test
+            void numberOfAppsIfNoAppsInTheSystem()
+            {
+                assertEquals(0, emptyAppStore.numberOfApps());
+            }
+            @Test
+            void numberOfAppsIfAppsInTheSystem()
+            {
+                assertEquals(11, appStore.numberOfApps());
+            }
+
+
+            @Test
+            void getAppByIndexReturnsNullWhenIndexIsInValid() {
+                assertEquals(0, emptyAppStore.numberOfApps());
+                assertNull(emptyAppStore.getAppByIndex(0));
+
+                assertEquals(11, appStore.numberOfApps());
+                assertNull(appStore.getAppByIndex(-1));
+                assertNull(appStore.getAppByIndex(100));
+
+            }
+            @Test
+            void getAppByIndexReturnsAPPWhenIndexIsValid() {
+                assertEquals(11, appStore.numberOfApps());
+                assertEquals(edAppBelowBoundary, appStore.getAppByIndex(0));
+                assertEquals(edAppOnBoundary, appStore.getAppByIndex(8));
+            }
+            @Test
+            void getAppByNameWhenValid()
+            {
+                assertEquals(prodAppOnBoundary, appStore.getAppByName("Outlook"));
+                assertEquals(edAppOnBoundary, appStore.getAppByName("Spike"));
+            }
+
+            @Test
+            void getAppByNamWhenWhenNotValid()
+            {
+                assertEquals(null, appStore.getAppByName("this is not an app"));
+                assertEquals(null, appStore.getAppByName("HelloWorldPrinter"));
+            }
+
+            @Test
+            void isValidIndex()
+            {
+                assertEquals(11, appStore.numberOfApps());
+                assertFalse(appStore.isValidIndex(-1));//under
+                assertTrue(appStore.isValidIndex(1));// on it
+                assertFalse(appStore.isValidIndex(12));//over it
+            }
+
+            @Nested
+            class setters
+            {
+
+
+            }
+
+
+
+        }
+
+        @Nested
+        class setters
+        {
+
+        }
 
     }
 
     @Nested
     class CRUDMethods {
+
+        @Nested
+        class addApp
+        {
+            @Test
+            void isValidApp()
+            {
+                GameApp app0 = new GameApp(developerKoolGames, "CookOff", 1000, 2.0, 1.99,  true);
+                assertTrue(appStore.addApp(app0));
+                assertEquals(app0.getAppName().toLowerCase(), (appStore.getAppByName("CookOff")).getAppName().toLowerCase());
+                assertEquals(12,appStore.numberOfApps());
+                EducationApp app1= new EducationApp(developerLego, "Spike", 1000, 2.0, 1.99, 10);
+                assertTrue(appStore.addApp(app1));
+                assertEquals(app1, appStore.getAppByIndex(12));
+
+
+
+            }
+
+
+        }
+
 
     }
 
@@ -97,7 +198,7 @@ public class AppStoreAPITest {
 
         @Test
         void listAllAppsReturnsAppsStoredWhenArrayListHasAppsStored() {
-            assertEquals(7, appStore.numberOfApps());
+            assertEquals(11, appStore.numberOfApps());
             String apps = appStore.listAllApps();
             //checks for objects in the string
             assertTrue(apps.contains("WeDo"));
@@ -123,8 +224,8 @@ public class AppStoreAPITest {
 
             //adding recommended apps to the list
             appStore.addApp(setupGameAppWithRating(5,4));
-            appStore.addApp(setupEducationAppWithRating(3,4));
-            appStore.addApp(setupProductivityAppWithRating(3,4));
+            appStore.addApp(setupEducationAppWithRating(4,4));
+            appStore.addApp(setupProductivityAppWithRating(4,4));
             assertEquals(10, appStore.numberOfApps());
 
             String apps = appStore.listAllRecommendedApps();
@@ -196,7 +297,7 @@ public class AppStoreAPITest {
 
     GameApp setupGameAppWithRating(int rating1, int rating2) {
         GameApp gameApp = new GameApp(developerEAGames, "MazeRunner", 1,
-                1.0, 1.00, false);
+                1.0, 1.00, true);
         gameApp.addRating(new Rating(rating1, "John Soap", "Exciting Game"));
         gameApp.addRating(new Rating(rating2, "Jane Soap", "Nice Game"));
         return gameApp;

@@ -511,7 +511,7 @@ public class AppStoreAPI implements ISerializer {
                     highestIndex = j;
                 }
             }
-           // swapApps(apps, i, highestIndex);//todo
+            swapApps((ArrayList<App>) apps, i, highestIndex);//todo
 
         }
     }
@@ -541,7 +541,7 @@ public class AppStoreAPI implements ISerializer {
 
         //doing the actual serialisation to an XML file
         ObjectInputStream in = xstream.createObjectInputStream(new FileReader(fileName()));
-        apps = (List<App>) in.readObject();
+        apps = (ArrayList<App>) in.readObject();
         in.close();
     }
 
