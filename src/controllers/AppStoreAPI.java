@@ -511,7 +511,7 @@ public class AppStoreAPI implements ISerializer {
                     highestIndex = j;
                 }
             }
-            //swapApps(apps, i, highestIndex);//todo
+           // swapApps(apps, i, highestIndex);//todo
 
         }
     }

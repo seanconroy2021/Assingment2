@@ -5,6 +5,8 @@ import controllers.DeveloperAPI;
 import models.*;
 import utils.ScannerInput;
 
+import javax.swing.*;
+
 public class Driver {
 
     //TODO Some skeleton code has been given to you.
@@ -13,6 +15,8 @@ public class Driver {
 
     private DeveloperAPI developerAPI = new DeveloperAPI();
     private AppStoreAPI appStoreAPI = new AppStoreAPI();
+    private JPanel mainPanel;
+    private JTextField appStoreTextField;
 
     public static void main(String[] args) {
         new Driver().start();
