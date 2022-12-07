@@ -61,9 +61,9 @@ public class AppStoreAPITest {
 
 
         //not included - edAppOnBoundary, edAppInvalidData, prodAppBelowBoundary, gameAppBelowBoundary, gameAppInvalidData.
-        appStore.addApp(edAppBelowBoundary);//1
-        appStore.addApp(prodAppOnBoundary);//2
-        appStore.addApp(gameAppAboveBoundary);//3
+        appStore.addApp(edAppBelowBoundary);//0
+        appStore.addApp(prodAppOnBoundary);//1
+        appStore.addApp(gameAppAboveBoundary);//2
         appStore.addApp(prodAppBelowBoundary);//4
         appStore.addApp(edAppAboveBoundary);//5
         appStore.addApp(prodAppInvalidData);//6
@@ -116,7 +116,7 @@ public class AppStoreAPITest {
             void getAppByIndexReturnsAPPWhenIndexIsValid() {
                 assertEquals(11, appStore.numberOfApps());
                 assertEquals(edAppBelowBoundary, appStore.getAppByIndex(0));
-                assertEquals(edAppOnBoundary, appStore.getAppByIndex(8));
+                assertEquals(edAppOnBoundary, appStore.getAppByIndex(7));
             }
             @Test
             void getAppByNameWhenValid()
@@ -152,22 +152,15 @@ public class AppStoreAPITest {
 
         }
 
-        @Nested
-        class setters
-        {
-
-        }
-
     }
 
     @Nested
     class CRUDMethods {
 
-        @Nested
-        class addApp
-        {
-            @Test
-            void isValidApp()
+
+
+        @Test
+        void addValidApp()
             {
                 GameApp app0 = new GameApp(developerKoolGames, "CookOff", 1000, 2.0, 1.99,  true);
                 assertTrue(appStore.addApp(app0));
@@ -177,10 +170,21 @@ public class AppStoreAPITest {
                 assertTrue(appStore.addApp(app1));
                 assertEquals(app1, appStore.getAppByIndex(12));
 
-
-
             }
 
+            @Test
+        void deletingAppThatDoesNotExistReturnsNull(){
+            assertNull(emptyAppStore.deleteAppByIndex(0));
+            assertNull(emptyAppStore.deleteAppByIndex(-1));
+            assertNull(emptyAppStore.deleteAppByIndex(12));
+        }
+
+        @Test
+        void deletingAppThatExistsDeletesAndReturnsDeletedObject(){
+            assertEquals(11, appStore.numberOfApps());
+            assertEquals(edAppBelowBoundary, appStore.deleteAppByIndex(0));
+            assertEquals(10, appStore.numberOfApps());
+            assertNull( appStore.getAppByName(edAppBelowBoundary.getAppName()));
 
         }
 
@@ -220,13 +224,13 @@ public class AppStoreAPITest {
 
         @Test
         void listRecommendedAppsReturnsRecommendedAppsWhenTheyExist() {
-            assertEquals(7, appStore.numberOfApps());
+            assertEquals(11, appStore.numberOfApps());
 
             //adding recommended apps to the list
             appStore.addApp(setupGameAppWithRating(5,4));
             appStore.addApp(setupEducationAppWithRating(4,4));
             appStore.addApp(setupProductivityAppWithRating(4,4));
-            assertEquals(10, appStore.numberOfApps());
+            assertEquals(7, appStore.numberOfApps());
 
             String apps = appStore.listAllRecommendedApps();
             System.out.println(apps);
@@ -241,6 +245,80 @@ public class AppStoreAPITest {
 
     @Nested
     class ReportingMethods {
+        @Test
+        void listAllAppByNameWhenNoneExist()
+        {
+            assertEquals(11, appStore.numberOfApps());
+           assertEquals("No apps found for: "+"hello world", appStore.listAllAppsByName("hello world"));
+
+        }
+
+        @Test
+        void listAllAppsByNameThatExistOne()
+        {
+            assertEquals(11, appStore.numberOfApps());
+            assertEquals(prodAppOnBoundary.toString()+"\n", appStore.listAllAppsByName("Outlook"));
+        }
+
+        @Test
+        void listAllAppsByNameThatExistMultiple()
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            GameApp app1 = new GameApp(developerKoolGames, "cooking", 1000, 2.0, 1.99,  true);
+            ProductivityApp app2 = new ProductivityApp(developerMicrosoft, "cooking", 1000, 2.0, 1.99);
+            EducationApp app3 = new EducationApp(developerLego, "cooking", 1000, 2.0, 1.99, 10);
+            test.addApp(app1);test.addApp(app2); test.addApp(app3);
+            assertEquals(3, test.numberOfApps());
+            assertEquals(app1.toString()+"\n"+app2.toString()+"\n"+app3.toString()+"\n", test.listAllAppsByName("cooking"));
+        }
+
+
+        @Test
+        void listAllAppsAboveOrEqualAGivenStarRatingWhenEmpty()
+        {
+            assertEquals("No Apps in the system", emptyAppStore.listAllAppsAboveOrEqualAGivenStarRating(1));
+        }
+
+        @Test
+        void listAllAppsAboveOrEqualAGivenStarRatingWhenMinus()
+        {
+           assertEquals("Sorry please input number bigger than or equal to 0", appStore.listAllAppsAboveOrEqualAGivenStarRating(-1));
+           assertEquals("Sorry please input number bigger than or equal to 0", appStore.listAllAppsAboveOrEqualAGivenStarRating(-2));
+           assertEquals("Sorry please input number bigger than or equal to 0", appStore.listAllAppsAboveOrEqualAGivenStarRating(-3));
+        }
+
+        @Test
+        void listAllAppsAboveOrEqualAGivenStarRatingWhenNoRating()
+        {
+            assertEquals("No apps have a rating of " +"10"+ " or above",appStore.listAllAppsAboveOrEqualAGivenStarRating(10));
+            assertEquals("No apps have a rating of " +"100"+ " or above",appStore.listAllAppsAboveOrEqualAGivenStarRating(100));
+            assertEquals("No apps have a rating of " +"200"+ " or above",appStore.listAllAppsAboveOrEqualAGivenStarRating(200));
+        }
+
+        @Test
+        void listAllAppsAboveOrEqualAGivenStarRatingWhenValid()
+        {
+           appStore.addApp(setupEducationAppWithRating(2, 2));
+           appStore.addApp(setupEducationAppWithRating(3, 2));
+           appStore.addApp(setupGameAppWithRating(3, 2));
+           appStore.addApp(setupGameAppWithRating(1, 2));
+           appStore.addApp(setupProductivityAppWithRating(3, 2));
+           assertEquals(16, appStore.numberOfApps());
+
+
+
+
+
+            assertEquals("",appStore.listAllAppsAboveOrEqualAGivenStarRating(1));
+            assertEquals(""+ " or above",appStore.listAllAppsAboveOrEqualAGivenStarRating(2));
+            assertEquals("",appStore.listAllAppsAboveOrEqualAGivenStarRating(3));
+        }
+
+
+
+
+
+
 
     }
 

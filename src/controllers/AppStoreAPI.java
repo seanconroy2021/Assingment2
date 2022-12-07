@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import static java.lang.Math.random;
@@ -328,7 +329,7 @@ public class AppStoreAPI implements ISerializer {
             {
                 if(app.getAppName().toLowerCase().contains(searchString.toLowerCase()))
                 {
-                    foundApp += app.toString();
+                    foundApp += app.toString()+"\n";
                 }
             }
         }
@@ -357,13 +358,17 @@ public class AppStoreAPI implements ISerializer {
         String ratingList="";
         if(apps.isEmpty())
         {
-            return "no apps in the system";
+            return "No Apps in the system";
+        }
+        else if (!(rating >=0))
+        {
+            return "Sorry please input number bigger than or equal to 0";
         }
         else
         {
             for (App app : apps)
             {
-                if(app.calculateRating()>= rating ) //  check do i use uilties.
+                if(app.calculateRating()>= rating )
                 {
                     int index = apps.indexOf(app);
                     ratingList += index +": " + app.toString();
@@ -543,6 +548,18 @@ public class AppStoreAPI implements ISerializer {
         ObjectInputStream in = xstream.createObjectInputStream(new FileReader(fileName()));
         apps = (ArrayList<App>) in.readObject();
         in.close();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AppStoreAPI that)) return false;
+        return Objects.equals(apps, that.apps);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(apps);
     }
 
     public void save() throws Exception {
