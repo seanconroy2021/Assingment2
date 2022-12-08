@@ -475,7 +475,7 @@ public class AppStoreAPI implements ISerializer {
         {
             for (App app : apps)
             {
-                if (app.getDeveloper().equals(developer))//toDo devloper make check if correct
+                if (app.getDeveloper().equals(developer))
                 {
                    count++;
                 }

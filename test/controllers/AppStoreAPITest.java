@@ -135,6 +135,13 @@ public class AppStoreAPITest {
             }
 
             @Test
+            void getFileName()
+            {
+                String test =appStore.fileName();
+                assertTrue(test.contains("apps.xml"));
+            }
+
+            @Test
             void isValidIndex()
             {
                 assertEquals(11, appStore.numberOfApps());
@@ -142,6 +149,7 @@ public class AppStoreAPITest {
                 assertTrue(appStore.isValidIndex(1));// on it
                 assertFalse(appStore.isValidIndex(12));//over it
             }
+
 
             @Nested
             class setters
@@ -260,18 +268,83 @@ public class AppStoreAPITest {
         }
 
         @Test
-        void listAllGameAppsWhenTheyExist()
+        void listAllGameAppsWhenTheyDontExist()
         {
             AppStoreAPI test = new AppStoreAPI();
             EducationApp app1 = new EducationApp(developerLego, "cooking", 1000, 2.0, 1.99, 10);
             test.addApp(app1);
-
             String testList = test.listAllGameApps();
-
-            assertTrue(test.listAllGameApps().contains(app1.toString()));
+            assertTrue(test.listAllGameApps().contains("no game apps"));
 
         }
 
+        @Test
+        void listAllGameAppsWhenItExist()
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            GameApp app1 = new GameApp(developerKoolGames, "GTA", 1000, 2.0, 1.99,  true);
+            test.addApp(app1);
+            GameApp app2 = new GameApp(developerKoolGames, "FIFIA", 1000, 2.0, 1.99,  true);
+            test.addApp(app2);
+            String testList = test.listAllGameApps();
+            assertTrue(test.listAllGameApps().contains(app1.toString()));
+            assertTrue(test.listAllGameApps().contains(app2.toString()));
+
+        }
+
+        @Test
+        void listAllEducationAppsWhenItDosentExist()
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            GameApp app1 = new GameApp(developerKoolGames, "GTA", 1000, 2.0, 1.99,  true);
+            test.addApp(app1);
+
+            String testList = test.listAllEducationApps();
+            assertTrue(test.listAllEducationApps().contains("no education apps"));
+
+        }
+
+        @Test
+        void listAllEducationAppsWhenItExist()
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            EducationApp app1 = new EducationApp(developerLego, "cooking", 1000, 2.0, 1.99, 10);
+            test.addApp(app1);
+            EducationApp app2 = new EducationApp(developerLego, "baking", 1000, 2.0, 1.99, 10);
+            test.addApp(app2);
+            String testList = test.listAllEducationApps();
+            assertTrue(test.listAllEducationApps().contains(app1.toString()));
+            assertTrue(test.listAllEducationApps().contains(app2.toString()));
+
+        }
+
+        @Test
+        void listAllProductivityAppsWhenItDosentExist()
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            ProductivityApp app1 = new ProductivityApp(developerMicrosoft, "To DO List", 1000, 2.0, 1.99);
+            test.addApp(app1);
+            ProductivityApp app2 = new ProductivityApp(developerMicrosoft, "Calculator", 1000, 2.0, 1.99);
+            test.addApp(app2);
+
+            String testList = test.listAllProductivityApps();
+            assertTrue(test.listAllProductivityApps().contains(app1.toString()));
+            assertTrue(test.listAllProductivityApps().contains(app2.toString()));
+
+        }
+
+
+        @Test
+        void listAllProductivityAppsWhenItExist()
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            GameApp app1 = new GameApp(developerKoolGames, "GTA", 1000, 2.0, 1.99,  true);
+            test.addApp(app1);
+
+            String testList = test.listAllProductivityApps();
+            assertTrue(test.listAllProductivityApps().contains("no productivity apps"));
+
+        }
 
     }
 
@@ -388,6 +461,7 @@ public class AppStoreAPITest {
             assertEquals(4, appStore.numberOfAppsByChosenDeveloper(developerLego));
             assertEquals(2, appStore.numberOfAppsByChosenDeveloper(developerMicrosoft));
         }
+
 
 
 
