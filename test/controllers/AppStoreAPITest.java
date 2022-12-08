@@ -22,6 +22,8 @@ public class AppStoreAPITest {
     private Developer developerApple = new Developer("Apple", "www.apple.com");
     private Developer developerMicrosoft = new Developer("Microsoft", "www.microsoft.com");
 
+    private Developer developerNoMatches = new Developer("Rockstar", "www.Rockstar.com");
+
     private AppStoreAPI appStore = new AppStoreAPI();
     private AppStoreAPI emptyAppStore = new AppStoreAPI();
 
@@ -215,7 +217,7 @@ public class AppStoreAPITest {
 
         @Test
         void listRecommendedAppsReturnsNoAppsWhenRecommendedAppsDoNotExist() {
-            assertEquals(7, appStore.numberOfApps());
+            assertEquals(11, appStore.numberOfApps());
 
             String apps = appStore.listAllRecommendedApps();
             //checks for the three objects in the string
@@ -230,7 +232,7 @@ public class AppStoreAPITest {
             appStore.addApp(setupGameAppWithRating(5,4));
             appStore.addApp(setupEducationAppWithRating(4,4));
             appStore.addApp(setupProductivityAppWithRating(4,4));
-            assertEquals(7, appStore.numberOfApps());
+            assertEquals(14, appStore.numberOfApps());
 
             String apps = appStore.listAllRecommendedApps();
             System.out.println(apps);
@@ -238,6 +240,36 @@ public class AppStoreAPITest {
             assertTrue(apps.contains("MazeRunner"));
             assertTrue(apps.contains("Evernote"));
             assertTrue(apps.contains("WeDo"));
+        }
+
+
+        @Test
+        void listAllGameAppsWhenTheyExist()
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            GameApp app1 = new GameApp(developerKoolGames, "cooking", 1000, 2.0, 1.99,  true);
+            ProductivityApp app2 = new ProductivityApp(developerMicrosoft, "cooking", 1000, 2.0, 1.99);
+            EducationApp app3 = new EducationApp(developerLego, "cooking", 1000, 2.0, 1.99, 10);
+            GameApp app4 = new GameApp(developerKoolGames, "fifia", 1000, 2.0, 1.99,  true);
+            test.addApp(app1);test.addApp(app2); test.addApp(app3); test.addApp(app4);
+
+            String testList = test.listAllGameApps();
+
+            assertTrue(test.listAllGameApps().contains(app1.toString()));
+            assertTrue(test.listAllGameApps().contains(app4.toString()));
+        }
+
+        @Test
+        void listAllGameAppsWhenTheyExist()
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            EducationApp app1 = new EducationApp(developerLego, "cooking", 1000, 2.0, 1.99, 10);
+            test.addApp(app1);
+
+            String testList = test.listAllGameApps();
+
+            assertTrue(test.listAllGameApps().contains(app1.toString()));
+
         }
 
 
@@ -296,23 +328,78 @@ public class AppStoreAPITest {
         }
 
         @Test
-        void listAllAppsAboveOrEqualAGivenStarRatingWhenValid()
+        void listAllAppsAboveOrEqualAGivenStarRatingWhenValid() // todo - need to finsh off
         {
-           appStore.addApp(setupEducationAppWithRating(2, 2));
-           appStore.addApp(setupEducationAppWithRating(3, 2));
-           appStore.addApp(setupGameAppWithRating(3, 2));
-           appStore.addApp(setupGameAppWithRating(1, 2));
-           appStore.addApp(setupProductivityAppWithRating(3, 2));
-           assertEquals(16, appStore.numberOfApps());
+         EducationApp app1 =setupEducationAppWithRating(4, 2);
+         GameApp app2=setupGameAppWithRating(3, 2);
+         ProductivityApp app3 = setupProductivityAppWithRating(3, 2);
+            appStore.addApp(app1); appStore.addApp(app2); appStore.addApp(app3);
 
+          String test1  =appStore.listAllAppsAboveOrEqualAGivenStarRating(1);
+          System.out.println(test1);
+          assertTrue(test1.contains(app1.toString()));
+          assertTrue(test1.contains("MazeRunner (Version 1.0)"));
+          assertTrue(test1.contains("MazeRunner (Version 1.0)"));
+            assertTrue(test1.contains("MazeRunner (Version 1.0)"));
 
-
-
-
-            assertEquals("",appStore.listAllAppsAboveOrEqualAGivenStarRating(1));
             assertEquals(""+ " or above",appStore.listAllAppsAboveOrEqualAGivenStarRating(2));
             assertEquals("",appStore.listAllAppsAboveOrEqualAGivenStarRating(3));
         }
+
+        @Test
+        void listAllAppsByChosenDeveloperEmpty()
+        {
+           String test =emptyAppStore.listAllAppsByChosenDeveloper(developerApple);
+           System.out.println(test);
+           assertTrue(test.contains("no apps in the system"));
+        }
+
+        @Test
+        void listAllAppsByChosenDeveloperNoMatchingDeveloper()
+        {
+            String test =appStore.listAllAppsByChosenDeveloper(developerNoMatches);
+            System.out.println(test);
+            assertTrue(test.contains("No apps for developer: "));
+            assertTrue(test.contains(developerNoMatches.toString()));
+        }
+
+        @Test
+        void listAllAppsByChosenDeveloperWithMatching()//todo - come  back to
+        {
+            String test1 =appStore.listAllAppsByChosenDeveloper(developerMicrosoft);
+            assertTrue(test1.contains(prodAppOnBoundary.toString()));
+            assertTrue(test1.contains(developerMicrosoft.toString()));
+
+            String test2 = appStore.listAllAppsByChosenDeveloper(developerEAGames);
+            assertEquals(gameAppBelowBoundary.toString()+"\n "+gameAppAboveBoundary.toString()+"\n ", appStore.listAllAppsByChosenDeveloper(developerEAGames));
+            System.out.println(appStore.listAllAppsByChosenDeveloper(developerEAGames));
+            System.out.println(gameAppBelowBoundary.toString()+"\n "+gameAppAboveBoundary.toString()+"\n ");
+        }
+
+        @Test
+        void numberOfAppsByChosenDeveloperEmpty()
+        {
+            assertEquals(0, appStore.numberOfAppsByChosenDeveloper(developerNoMatches));
+        }
+
+        @Test
+        void numberOfAppsByChosenDeveloperMatching()
+        {
+            assertEquals(4, appStore.numberOfAppsByChosenDeveloper(developerLego));
+            assertEquals(2, appStore.numberOfAppsByChosenDeveloper(developerMicrosoft));
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

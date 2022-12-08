@@ -215,7 +215,7 @@ public class AppStoreAPI implements ISerializer {
                 if(app instanceof GameApp)
                 {
                     int index = apps.indexOf(app);
-                    listOfGameApps += index +": " + app.toString();
+                    listOfGameApps += index +": " + app.toString()+"\n";
                 }
             }
         }
@@ -370,8 +370,8 @@ public class AppStoreAPI implements ISerializer {
             {
                 if(app.calculateRating()>= rating )
                 {
-                    int index = apps.indexOf(app);
-                    ratingList += index +": " + app.toString();
+
+                    ratingList += app.toString()+"\n";
                 }
             }
         }
@@ -439,10 +439,10 @@ public class AppStoreAPI implements ISerializer {
         {
             for (App app : apps)
             {
-                if (app.getDeveloper().equals(developer))//toDo devloper make check if correct
+                if (app.getDeveloper().equals(developer))
                 {
                     int index = apps.indexOf(app);
-                    appsByDev += index +": " + app.toString();
+                    appsByDev += index +": " + app.toString()+"\n";
                 }
             }
         }
