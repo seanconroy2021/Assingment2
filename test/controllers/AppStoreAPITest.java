@@ -151,14 +151,6 @@ public class AppStoreAPITest {
             }
 
 
-            @Nested
-            class setters
-            {
-
-
-            }
-
-
 
         }
 
@@ -202,6 +194,29 @@ public class AppStoreAPITest {
     }
 
     @Nested
+    class RandomGenerate
+    {//todo
+        @Test
+        void simulateRatingsChecker()//todo -check
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            GameApp app1 = new GameApp(developerKoolGames, "cooking", 1000, 2.0, 1.99,  true);
+            ProductivityApp app2 = new ProductivityApp(developerMicrosoft, "cooking", 1000, 2.0, 1.99);
+            test.addApp(app1);test.addApp(app2);
+
+            test.simulateRatings();
+            System.out.println(app1.calculateRating());
+            assertTrue(app1.calculateRating()>-1);
+            System.out.println(app2.calculateRating());
+            assertTrue(app2.calculateRating()>-1);
+            assertTrue(app1.calculateRating()>=5);
+            assertTrue(app2.calculateRating()>=5);
+
+
+
+        }
+    }
+    @Nested
     class ListingMethods {
 
         @Test
@@ -230,6 +245,12 @@ public class AppStoreAPITest {
             String apps = appStore.listAllRecommendedApps();
             //checks for the three objects in the string
             assertTrue(apps.contains("No recommended apps"));
+        }
+
+        @Test
+        void listRecommendedAppsReturnsNoAppsWhenRecommendedAppsWhenEmpty() {
+            String apps = emptyAppStore.listAllRecommendedApps();
+            assertTrue(apps.contains("no apps in the system"));
         }
 
         @Test
@@ -279,6 +300,15 @@ public class AppStoreAPITest {
         }
 
         @Test
+        void listAllGameAppsWhenEmpty()
+        {
+            String test = emptyAppStore.listAllGameApps();
+            assertTrue(test.contains("no apps in the system"));
+        }
+
+
+
+        @Test
         void listAllGameAppsWhenItExist()
         {
             AppStoreAPI test = new AppStoreAPI();
@@ -303,6 +333,14 @@ public class AppStoreAPITest {
             assertTrue(test.listAllEducationApps().contains("no education apps"));
 
         }
+
+        @Test
+        void listAllEducationAppsWhenEmpty()
+        {
+            String test = emptyAppStore.listAllEducationApps();
+            assertTrue(test.contains("no apps in the system"));
+        }
+
 
         @Test
         void listAllEducationAppsWhenItExist()
@@ -333,6 +371,13 @@ public class AppStoreAPITest {
 
         }
 
+        @Test
+        void listAllProductivityAppsWhenEmpty()
+        {
+            String test = emptyAppStore.listAllProductivityApps();
+            assertTrue(test.contains("no apps in the system"));
+        }
+
 
         @Test
         void listAllProductivityAppsWhenItExist()
@@ -345,6 +390,28 @@ public class AppStoreAPITest {
             assertTrue(test.listAllProductivityApps().contains("no productivity apps"));
 
         }
+        @Test
+        void listSummaryOfAllAppsWhenEmpty()
+        {
+            String test = emptyAppStore.listSummaryOfAllApps();
+            assertTrue(test.contains("no apps"));
+        }
+
+        @Test
+        void listSummaryOfAllAppsWhenItExist()
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            GameApp app1 = new GameApp(developerKoolGames, "GTA", 1000, 2.0, 1.99,  true);
+            ProductivityApp app2 = new ProductivityApp(developerMicrosoft, "cooking", 1000, 2.0, 1.99);
+            EducationApp app3 = new EducationApp(developerLego, "cooking", 1000, 2.0, 1.99, 10);
+            test.addApp(app1);test.addApp(app2); test.addApp(app3);
+
+            String testList = test.listSummaryOfAllApps();
+            assertTrue(testList.contains(app1.appSummary()));
+            assertTrue(testList.contains(app2.appSummary()));
+            assertTrue(testList.contains(app3.appSummary()));
+        }
+
 
     }
 
@@ -355,6 +422,14 @@ public class AppStoreAPITest {
         {
             assertEquals(11, appStore.numberOfApps());
            assertEquals("No apps found for: "+"hello world", appStore.listAllAppsByName("hello world"));
+
+        }
+
+        @Test
+        void listAllAppByNameWhenEmpty()
+        {
+            assertEquals(0, emptyAppStore.numberOfApps());
+            assertEquals("no apps in the system", emptyAppStore.listAllAppsByName("hello world"));
 
         }
 
@@ -455,6 +530,13 @@ public class AppStoreAPITest {
             assertEquals(0, appStore.numberOfAppsByChosenDeveloper(developerNoMatches));
         }
 
+
+        @Test
+        void numberOfAppsByChosenDeveloperEmptyArray()
+        {
+            assertEquals(0, emptyAppStore.numberOfAppsByChosenDeveloper(developerNoMatches));
+        }
+
         @Test
         void numberOfAppsByChosenDeveloperMatching()
         {
@@ -463,37 +545,15 @@ public class AppStoreAPITest {
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
-    @Nested
-    class SearchingMethods {
-
-    }
 
     @Nested
     class SortingMethods {
 
         @Test
         void sortByNameAscendingReOrdersList() {
-            assertEquals(7, appStore.numberOfApps());
+            assertEquals(11, appStore.numberOfApps());
             //checks the order of the objects in the list
             assertEquals(edAppBelowBoundary, appStore.getAppByIndex(0));
             assertEquals(prodAppOnBoundary, appStore.getAppByIndex(1));

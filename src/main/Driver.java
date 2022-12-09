@@ -2,7 +2,8 @@ package main;
 
 import controllers.AppStoreAPI;
 import controllers.DeveloperAPI;
-import models.*;
+import models.App;
+import models.Developer;
 import utils.ScannerInput;
 
 import javax.swing.*;
@@ -54,7 +55,7 @@ public class Driver {
         while (option != 0) {
             switch (option) {
                 case 1 -> runDeveloperMenu();
-                //case 2 -> // TODO run the App Store Menu and the associated methods (your design here)
+                //case 2 ->
                 //case 3 -> // TODO run the Reports Menu and the associated methods (your design here)
                 case 4 -> searchAppsBySpecificCriteria();
                 //case 5 -> // TODO Sort Apps by Name
@@ -76,6 +77,53 @@ public class Driver {
         System.out.println("Exiting....");
         System.exit(0);
     }
+    //--------------------------------------------------
+    //  App Management - Menu Items
+    //--------------------------------------------------
+    private int appMenu()
+    {
+        System.out.println("""
+                 -------App Store Menu-------
+                |   1) Add a app             |
+                |   2) Update a app          |
+                |   3) Delete app            |
+                |   0) RETURN to main menu   |
+                 ----------------------------""");
+        return ScannerInput.validNextInt("==>> ");
+    }
+
+    private void runAppMenu() {
+        int option = appMenu();
+        while (option != 0) {
+            switch (option) {
+                case 1 -> addApp();
+                case 2 -> updateApp();
+                case 3 -> updateDeveloper();
+                case 4 -> deleteApp();
+                default -> System.out.println("Invalid option entered" + option);
+            }
+            ScannerInput.validNextLine("\n Press the enter key to continue");
+            option = developerMenu();
+        }
+    }
+    private void  addApp()
+    {
+
+    }
+
+    private void  updateApp()
+    {
+
+    }
+
+    private void  deleteApp()
+    {
+
+    }
+
+
+
+
 
     //--------------------------------------------------
     //  Developer Management - Menu Items
@@ -91,6 +139,7 @@ public class Driver {
                  ----------------------------""");
         return ScannerInput.validNextInt("==>> ");
     }
+
 
     private void runDeveloperMenu() {
         int option = developerMenu();

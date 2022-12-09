@@ -183,7 +183,7 @@ public class AppStoreAPI implements ISerializer {
             String summaryOfApps="";
             for (App app : apps)
             {
-               summaryOfApps += app.appSummary();
+               summaryOfApps += app.appSummary()+"\n";
             }
 
             return summaryOfApps;
@@ -505,7 +505,7 @@ public class AppStoreAPI implements ISerializer {
 
 
     //------------ sorting method ------------//
-    public void sortAppsByNameAscending() //TODO
+    public void sortAppsByNameAscending()
     {
         for (int i = apps.size() -1; i >= 0; i--)
         {
@@ -550,17 +550,7 @@ public class AppStoreAPI implements ISerializer {
         in.close();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AppStoreAPI that)) return false;
-        return Objects.equals(apps, that.apps);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(apps);
-    }
 
     public void save() throws Exception {
         XStream xstream = new XStream(new DomDriver());
