@@ -23,6 +23,7 @@ public class AppStoreAPI implements ISerializer {
 
 
 
+
     // Method to simulate ratings (using the RatingUtility).
     // This will be called from the Driver (see skeleton code)
 
@@ -74,7 +75,7 @@ public class AppStoreAPI implements ISerializer {
      * @return True of the index number passed is a valid index in the ArrayList, false otherwise.
      */
     public boolean isValidIndex(int index) {
-        return (index >= 0) && (index < apps.size());
+        return Utilities.isValidIndex(apps, index);
 
     }
 
@@ -507,7 +508,7 @@ public class AppStoreAPI implements ISerializer {
     //------------ sorting method ------------//
     public void sortAppsByNameAscending()
     {
-        for (int i = apps.size() -1; i >= 0; i--)
+        for (int i = apps.size() -1; i > 0; i--)
         {
             int highestIndex = 0;
             for (int j = 0; j <= i; j++)
@@ -517,6 +518,8 @@ public class AppStoreAPI implements ISerializer {
                 }
             }
             swapApps((ArrayList<App>) apps, i, highestIndex);//todo
+
+
 
         }
     }
@@ -549,7 +552,6 @@ public class AppStoreAPI implements ISerializer {
         apps = (ArrayList<App>) in.readObject();
         in.close();
     }
-
 
 
     public void save() throws Exception {

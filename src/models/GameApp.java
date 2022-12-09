@@ -13,7 +13,6 @@ public class GameApp extends App {
 
 
     public boolean isMultiplayer() {
-        System.out.println("this is the multiplayer "+ isMultiplayer);
         return isMultiplayer;
     }
 

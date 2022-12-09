@@ -4,7 +4,9 @@ import controllers.AppStoreAPI;
 import controllers.DeveloperAPI;
 import models.App;
 import models.Developer;
+import models.EducationApp;
 import utils.ScannerInput;
+import utils.Utilities;
 
 import javax.swing.*;
 
@@ -64,6 +66,7 @@ public class Driver {
                 case 8 -> simulateRatings();
                 case 20 -> saveAllData();
                 case 21 -> loadAllData();
+                case 22->  appVersionInput(); //todo-tester case
                 default -> System.out.println("Invalid option entered: " + option);
             }
             ScannerInput.validNextLine("\n Press the enter key to continue");
@@ -96,7 +99,7 @@ public class Driver {
         int option = appMenu();
         while (option != 0) {
             switch (option) {
-                case 1 -> addApp();
+                //case 1 -> //addApp();
                 case 2 -> updateApp();
                 case 3 -> updateDeveloper();
                 case 4 -> deleteApp();
@@ -106,9 +109,78 @@ public class Driver {
             option = developerMenu();
         }
     }
-    private void  addApp()
-    {
 
+    //________________________
+    // super App Attributes Input
+    //________________________
+    private String  appNameInput()
+    {
+        String appName = ScannerInput.validNextLine("Please enter the app name: ");
+          while(appStoreAPI.isValidAppName(appName))
+          {
+              appName = ScannerInput.validNextLine("Please enter a valid app name: ");
+          }
+
+          return appName;
+    }
+
+    private int  appSizeInput()
+    {
+        int appSize = ScannerInput.validNextInt("Please enter the app size: ");
+        Utilities.validRange(appSize, 1, 1000);
+        while(!Utilities.validRange(appSize, 1, 1000))
+        {
+            appSize = ScannerInput.validNextInt("Please enter a valid app size (1-1000 MB): ");
+        }
+
+        return appSize;
+    }
+
+    private double  appVersionInput()
+    {
+        double appVersion = ScannerInput.validNextDouble("Please enter the version : ");
+
+        while(!Utilities.greaterThanOrEqualTo(appVersion, 1))
+        {
+            appVersion = ScannerInput.validNextInt("Please enter a valid version greater than one : ");
+        }
+
+        return appVersion;
+    }
+
+    private double  appVersionInput()
+    {
+        double appVersion = ScannerInput.validNextDouble("Please enter the version : ");
+
+        while(!Utilities.greaterThanOrEqualTo(appVersion, 1))
+        {
+            appVersion = ScannerInput.validNextInt("Please enter a valid version greater than one : ");
+        }
+
+        return appVersion;
+    }
+
+
+
+    private String addEducationApp()
+    {
+        Developer developer =showDeveloperToAddToApp();
+        //EducationAppDeveloper developer, String appName, double appSize, double appVersion, double appCost, int level)
+        String appName = ScannerInput.validNextLine("Please enter the  app name: ");
+        //double appSize =
+        //appStoreAPI.addApp(new EducationApp())
+
+        return "";
+    }
+
+    private String addGameApp()
+    {
+        return "";
+    }
+
+    private String addProductivtyApp()
+    {
+        return "";
     }
 
     private void  updateApp()
@@ -198,6 +270,19 @@ public class Driver {
         }
     }
 
+    private Developer  showDeveloperToAddToApp()
+    {
+        System.out.println(developerAPI.listDevelopers()+"\n");
+        Developer developer  = readValidDeveloperByName();
+
+        while (developer == null)
+        {
+            developer = readValidDeveloperByName();
+        }
+
+        return developer;
+
+    }
 
 
     //--------------------------------------------------
@@ -220,17 +305,17 @@ public class Driver {
     }
 
     //--------------------------------------------------
-    // TODO UNCOMMENT THIS COMPLETED CODE as you start working through this class
+    //simulateRatings
     //--------------------------------------------------
     private void simulateRatings() {
-        // simulate random ratings for all apps (to give data for recommended apps and reports etc).
-        //if (appStoreAPI.numberOfApps() > 0) {
-        //    System.out.println("Simulating ratings...");
-        //    appStoreAPI.simulateRatings();
-        //    System.out.println(appStoreAPI.listSummaryOfAllApps());
-        //} else {
-        //    System.out.println("No apps");
-        //}
+         //simulate random ratings for all apps (to give data for recommended apps and reports etc).
+        if (appStoreAPI.numberOfApps() > 0) {
+            System.out.println("Simulating ratings...");
+            appStoreAPI.simulateRatings();
+            System.out.println(appStoreAPI.listSummaryOfAllApps());
+        } else {
+            System.out.println("No apps");
+        }
     }
 
     //--------------------------------------------------
@@ -238,13 +323,20 @@ public class Driver {
     //--------------------------------------------------
 
     private void saveAllData() {
-        // TODO try-catch to save the developers to XML file
-        // TODO try-catch to save the apps in the store to XML file
+
+        try {
+            appStoreAPI.load();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void loadAllData() {
-        // TODO try-catch to load the developers from XML file
-        // TODO try-catch to load the apps in the store from XML file
+        try {
+            appStoreAPI.save();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
