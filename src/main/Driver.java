@@ -2,9 +2,7 @@ package main;
 
 import controllers.AppStoreAPI;
 import controllers.DeveloperAPI;
-import models.App;
-import models.Developer;
-import models.EducationApp;
+import models.*;
 import utils.ScannerInput;
 import utils.Utilities;
 
@@ -23,6 +21,24 @@ public class Driver {
 
     public static void main(String[] args) {
         new Driver().start();
+    }
+
+
+    // helper method
+
+    private boolean appInSystem()
+    {
+        if(appStoreAPI.numberOfApps() == 0)
+        {
+            System.out.println("no apps in system");
+            return   false;
+
+        }
+        else
+        {
+            return true;
+        }
+
     }
 
     public void start() {
@@ -57,16 +73,15 @@ public class Driver {
         while (option != 0) {
             switch (option) {
                 case 1 -> runDeveloperMenu();
-                //case 2 ->
+                //case 2 ->//Todo need menu here
                 //case 3 -> // TODO run the Reports Menu and the associated methods (your design here)
                 case 4 -> searchAppsBySpecificCriteria();
-                //case 5 -> // TODO Sort Apps by Name
-                //case 6 -> // TODO print the recommended apps
-                //case 7 -> // TODO print the random app of the day
-                case 8 -> simulateRatings();
+                case 5 ->  sortAppByName();
+                case 6 ->  recommendedApps();
+                case 7 ->  randomAppOfDay();
+                case 8 ->  simulateRatings();
                 case 20 -> saveAllData();
                 case 21 -> loadAllData();
-                case 22->  appVersionInput(); //todo-tester case
                 default -> System.out.println("Invalid option entered: " + option);
             }
             ScannerInput.validNextLine("\n Press the enter key to continue");
@@ -83,36 +98,53 @@ public class Driver {
     //--------------------------------------------------
     //  App Management - Menu Items
     //--------------------------------------------------
-    private int appMenu()
+    private  int addAppMenu()
     {
         System.out.println("""
-                 -------App Store Menu-------
-                |   1) Add a app             |
-                |   2) Update a app          |
-                |   3) Delete app            |
+                 -----------App App-----------
+                |   1) Add a education app   |
+                |   2) Add a game app        |
+                |   3) Add a productivty app |
                 |   0) RETURN to main menu   |
                  ----------------------------""");
-        return ScannerInput.validNextInt("==>> ");
+      return ScannerInput.validNextInt("==>> ");
+
     }
 
-    private void runAppMenu() {
-        int option = appMenu();
-        while (option != 0) {
-            switch (option) {
-                //case 1 -> //addApp();
-                case 2 -> updateApp();
-                case 3 -> updateDeveloper();
-                case 4 -> deleteApp();
-                default -> System.out.println("Invalid option entered" + option);
+    private void runAddAppMenu()
+    {
+        int index =  addAppMenu();
+        while (index != 0) {
+            switch (index) {
+                case 1 -> addEducationApp();
+                case 2 -> addGameApp();
+                case 3 -> addProductivtyApp();
+                default -> System.out.println("Invalid option entered" + index);
             }
             ScannerInput.validNextLine("\n Press the enter key to continue");
-            option = developerMenu();
+            index = addAppMenu();
         }
+
     }
 
     //________________________
-    // super App Attributes Input
+    // super App Attributes Input & validation for them
     //________________________
+
+    private Developer  developerInput()
+    {
+
+        System.out.println(developerAPI.listDevelopers()+"\n");
+        Developer developer  = readValidDeveloperByName();
+
+        while (developer == null)
+        {
+            developer = readValidDeveloperByName();
+        }
+
+        return developer;
+
+    }
     private String  appNameInput()
     {
         String appName = ScannerInput.validNextLine("Please enter the app name: ");
@@ -148,39 +180,71 @@ public class Driver {
         return appVersion;
     }
 
-    private double  appVersionInput()
+    private double  appCostInput()
     {
-        double appVersion = ScannerInput.validNextDouble("Please enter the version : ");
+        double appCost = ScannerInput.validNextDouble("Please enter the cost €");
 
-        while(!Utilities.greaterThanOrEqualTo(appVersion, 1))
+        while(!Utilities.greaterThanOrEqualTo(appCost, 0))
         {
-            appVersion = ScannerInput.validNextInt("Please enter a valid version greater than one : ");
+            appCost = ScannerInput.validNextInt("Please enter a valid cost greater than zero € ");
         }
 
-        return appVersion;
+        return appCost;
     }
 
 
-
-    private String addEducationApp()
+    private void addEducationApp()
     {
-        Developer developer =showDeveloperToAddToApp();
-        //EducationAppDeveloper developer, String appName, double appSize, double appVersion, double appCost, int level)
-        String appName = ScannerInput.validNextLine("Please enter the  app name: ");
-        //double appSize =
-        //appStoreAPI.addApp(new EducationApp())
 
-        return "";
+        Developer developer = developerInput();
+        String name =appNameInput();
+        int size = appSizeInput();
+        double version = appVersionInput();
+        double cost = appCostInput();
+
+        int level = ScannerInput.validNextInt("Please enter the app level: ");
+        Utilities.validRange(level, 1, 1000);
+        while(!Utilities.validRange(level, 0, 10))
+        {
+            level = ScannerInput.validNextInt("Please enter a valid app size (1-1000 MB): ");
+        }
+
+        boolean test  =appStoreAPI.addApp(new EducationApp(developer, name, size, version, cost, level));
+
+        System.out.println(Utilities.WasItSuccessful(test));
     }
 
-    private String addGameApp()
+    private void addGameApp()
     {
-        return "";
+        Developer developer = developerInput();
+        String name =appNameInput();
+        int size = appSizeInput();
+        double version = appVersionInput();
+        double cost = appCostInput();
+
+        char multiplayerChar = ScannerInput.validNextChar("Please enter (Y or N) for multiplayer: ");
+
+        while(!Utilities.YNValidationChar(multiplayerChar))
+        {
+            multiplayerChar = ScannerInput.validNextChar("Please try again (Y or N) for multiplayer: ");
+        }
+
+        boolean test  =appStoreAPI.addApp(new GameApp(developer, name, size, version, cost, Utilities.YNtoBoolean(multiplayerChar)));
+
+        System.out.println(Utilities.WasItSuccessful(test));
+
+
     }
 
-    private String addProductivtyApp()
+    private void addProductivtyApp()
     {
-        return "";
+        Developer developer = developerInput();
+        String name =appNameInput();
+        int size = appSizeInput();
+        double version = appVersionInput();
+        double cost = appCostInput();
+        boolean test  =appStoreAPI.addApp(new ProductivityApp(developer, name, size, version, cost));
+        System.out.println(Utilities.WasItSuccessful(test));
     }
 
     private void  updateApp()
@@ -190,6 +254,28 @@ public class Driver {
 
     private void  deleteApp()
     {
+        if(appInSystem())
+        {
+            System.out.println(appStoreAPI.listAllApps());
+            String appName = ScannerInput.validNextLine("Please enter app name like to delete: ");
+
+            while(!appStoreAPI.isValidAppName(appName))
+            {
+                appName = ScannerInput.validNextLine("Sorry this "+appName +"is not valid please try again : ");
+            }
+
+
+            App app  = appStoreAPI.deleteAppByName(appName);
+
+            if(app == null)
+            {
+                System.out.println("not successful");
+            }
+            else
+            {
+                System.out.println("successful");
+            }
+        }
 
     }
 
@@ -263,31 +349,15 @@ public class Driver {
 
     private Developer readValidDeveloperByName() {
         String developerName = ScannerInput.validNextLine("Please enter the developer's name: ");
-        if (developerAPI.isValidDeveloper(developerName)) {
-            return developerAPI.getDeveloperByName(developerName);
-        } else {
-            return null;
+        while (!developerAPI.isValidDeveloper(developerName)) {
+            developerName = ScannerInput.validNextLine("Please enter the a valid developer's name: ");
         }
-    }
-
-    private Developer  showDeveloperToAddToApp()
-    {
-        System.out.println(developerAPI.listDevelopers()+"\n");
-        Developer developer  = readValidDeveloperByName();
-
-        while (developer == null)
-        {
-            developer = readValidDeveloperByName();
-        }
-
-        return developer;
-
+        return developerAPI.getDeveloperByName(developerName);
     }
 
 
-    //--------------------------------------------------
-    // TODO UNCOMMENT THIS CODE as you start working through this class
-    //--------------------------------------------------
+
+
     private void searchAppsBySpecificCriteria() {
         System.out.println("""
                 What criteria would you like to search apps by:
@@ -296,14 +366,76 @@ public class Driver {
                   3) Rating (all apps of that rating or above)""");
         int option = ScannerInput.validNextInt("==>> ");
         switch (option) {
-            // TODO Search methods below
-            // case 1 -> searchAppsByName();
-            // case 2 -> searchAppsByDeveloper(readValidDeveloperByName());
-            // case 3 -> searchAppsEqualOrAboveAStarRating();
-            // default -> System.out.println("Invalid option");
+
+             case 1 -> searchAppsByName();
+             case 2 -> searchAppsByDeveloper(readValidDeveloperByName());
+             case 3 -> searchAppsEqualOrAboveAStarRating();
+             default -> System.out.println("Invalid option");
         }
     }
 
+
+    private void searchAppsEqualOrAboveAStarRating()
+    {
+        if(appInSystem())
+        {
+            int star = ScannerInput.validNextInt("Please enter star rating: ");
+
+            while (Utilities.validRange(star, 1, 5))
+            {
+                star = ScannerInput.validNextInt("Please enter star rating: ");
+            }
+
+            System.out.println(appStoreAPI.listAllAppsAboveOrEqualAGivenStarRating(star));
+        }
+    }
+    private void searchAppsByDeveloper(Developer developer)
+    {
+
+        System.out.println(appStoreAPI.listAllAppsByChosenDeveloper(developer));
+    }
+
+
+    private void sortAppByName()
+    {
+        if(appInSystem())
+        {
+            appStoreAPI.sortAppsByNameAscending();
+            appStoreAPI.listAllApps();
+        }
+    }
+    private void recommendedApps()
+    {
+        if(appInSystem())
+        {
+            System.out.println(appStoreAPI.listAllRecommendedApps());
+        }
+    }
+
+    private void searchAppsByName()
+    {
+        if(appInSystem())
+        {
+            String appName = ScannerInput.validNextLine("Please enter app name like to find: ");
+
+            while(!appStoreAPI.isValidAppName(appName))
+            {
+                appName = ScannerInput.validNextLine("Sorry this "+appName +" is not valid please try again : ");
+            }
+
+            System.out.println(appStoreAPI.getAppByName(appName).toString());
+        }
+
+
+    }
+
+    private void randomAppOfDay()
+    {
+        if(appInSystem())
+        {
+            System.out.println(appStoreAPI.randomApp().appSummary());
+        }
+    }
     //--------------------------------------------------
     //simulateRatings
     //--------------------------------------------------
@@ -314,7 +446,7 @@ public class Driver {
             appStoreAPI.simulateRatings();
             System.out.println(appStoreAPI.listSummaryOfAllApps());
         } else {
-            System.out.println("No apps");
+            System.out.println("No apps in system");
         }
     }
 

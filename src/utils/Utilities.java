@@ -44,6 +44,29 @@ public class Utilities {
     }
 
     /**
+     * This method will check to see if the char sent in is valid so if not y,Y,n,N it will return false else true
+     * @param checking The char value that will be used to determine true/false
+     * @return Return true if the checking is equal to y,Y,n,N else false
+     */
+    public static boolean YNValidationChar (char checking){
+        if (checking=='y'||checking=='Y'|| checking =='n'|| checking =='N')
+        {return true;}
+        else
+        {return false;}
+    }
+
+    /**
+     * This method will take in a boolean and then return a string say successful(true) or not successful(false)
+     * @param checking The boolean value will be used to determine true/false
+     * @return Return successful if true  or not successful if false.
+     */
+    public static String WasItSuccessful (boolean checking){
+       if(checking == true)
+       {return " successful";}
+       else
+       {return " not successful";}
+    }
+    /**
      * This method returns true if the numberToCheck is between min and max (both inclusive)
      *
      * @param numberToCheck The number whose range is being checked.

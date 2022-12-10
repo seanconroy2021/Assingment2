@@ -64,6 +64,8 @@ public class AppStoreAPI implements ISerializer {
         else {return null;}
     }
 
+
+
     //---------------------
     // Validation methods
     //---------------------
@@ -136,6 +138,26 @@ public class AppStoreAPI implements ISerializer {
         {
             return null;
         }
+    }
+
+
+    /**
+     * Delete a app from the arraylist, by using the app name which is passed as a parameter.
+     * @param name The name of the app in the arraylist
+     * @return The deleted App object or null if no object is at the index location.
+     */
+    public App deleteAppByName(String name)
+    {
+        if(isValidAppName(name))
+        {
+            int index =  apps.indexOf(getAppByName(name));
+            if (isValidIndex(index))
+            {
+                return  apps.remove(index);
+            }
+        }
+
+        return null;
     }
 
     /**
