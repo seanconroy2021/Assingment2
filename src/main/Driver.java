@@ -73,8 +73,8 @@ public class Driver {
         while (option != 0) {
             switch (option) {
                 case 1 -> runDeveloperMenu();
-                //case 2 ->//Todo need menu here
-                //case 3 -> // TODO run the Reports Menu and the associated methods (your design here)
+                case 2 -> runAppManagementMenu();
+                case 3 -> runReportsMenu();
                 case 4 -> searchAppsBySpecificCriteria();
                 case 5 ->  sortAppByName();
                 case 6 ->  recommendedApps();
@@ -82,6 +82,7 @@ public class Driver {
                 case 8 ->  simulateRatings();
                 case 20 -> saveAllData();
                 case 21 -> loadAllData();
+                case 22 -> updateGameApp();
                 default -> System.out.println("Invalid option entered: " + option);
             }
             ScannerInput.validNextLine("\n Press the enter key to continue");
@@ -111,18 +112,84 @@ public class Driver {
 
     }
 
-    private void runAddAppMenu()
+
+    private  int AppManagementMenu()
     {
-        int index =  addAppMenu();
+        System.out.println("""
+                 -----------App App-----------
+                |   1) Add a app             |
+                |   2) Update a app          |
+                |   3) Delete an app         |
+                |   0) RETURN to main menu   |
+                 ----------------------------""");
+        return ScannerInput.validNextInt("==>> ");
+
+    }
+
+    private void runAppManagementMenu()
+    {
+        int index =  AppManagementMenu();
         while (index != 0) {
             switch (index) {
-                case 1 -> addEducationApp();
-                case 2 -> addGameApp();
-                case 3 -> addProductivtyApp();
+                case 1 -> runAddAppMenu();
+                case 2 -> runUpdateMenu();
+                case 3 -> deleteApp();
                 default -> System.out.println("Invalid option entered" + index);
             }
             ScannerInput.validNextLine("\n Press the enter key to continue");
-            index = addAppMenu();
+            index = AppManagementMenu();
+        }
+
+    }
+
+    private  int appUpdateMenu()
+    {
+        System.out.println("""
+                 -----------App App-----------
+                |   1) Update game app       |
+                |   2) Update education app  |
+                |   3) update productivty app|
+                |   0) RETURN to main menu   |
+                 ----------------------------""");
+        return ScannerInput.validNextInt("==>> ");
+
+    }
+    private void runUpdateMenu()
+    {
+        if(appInSystem())
+        {
+            int index = appUpdateMenu();
+            while (index != 0) {
+                switch (index) {
+                    case 1 -> updateGameApp();
+                    case 2 -> updateEducationApp();
+                    case 3 -> updateProductivtyApp();
+                    default -> System.out.println("Invalid option entered" + index);
+                }
+                ScannerInput.validNextLine("\n Press the enter key to continue");
+                index = appUpdateMenu();
+            }
+        }
+    }
+    private void runAddAppMenu()
+    {
+        if(!developerAPI.getDevelopers().isEmpty()) {
+            int index = addAppMenu();
+            while (index != 0) {
+                switch (index) {
+                    case 1 -> addEducationApp();
+                    case 2 -> addGameApp();
+                    case 3 -> addProductivtyApp();
+                    default -> System.out.println("Invalid option entered" + index);
+                }
+                ScannerInput.validNextLine("\n Press the enter key to continue");
+                index = addAppMenu();
+            }
+
+        }
+        else
+        {
+            System.out.println("please add developers first");
         }
 
     }
@@ -246,11 +313,71 @@ public class Driver {
         boolean test  =appStoreAPI.addApp(new ProductivityApp(developer, name, size, version, cost));
         System.out.println(Utilities.WasItSuccessful(test));
     }
-
-    private void  updateApp()
+    private void updateGameApp()
     {
+        System.out.println(appStoreAPI.listAllGameApps());
+        String oldAppName = ScannerInput.validNextLine("Please enter the app name to update: ");
+        while(!appStoreAPI.isValidAppName(oldAppName))
+        {
+            oldAppName = ScannerInput.validNextLine("Please enter a valid app name to update: ");
+        }
+        Developer developer = developerInput();
+        String name = appNameInput();
+        double size = appSizeInput();
+        double version = appVersionInput();
+        double cost = appCostInput();
+        char multiplayerChar = ScannerInput.validNextChar("Please enter (Y or N) for multiplayer: ");
 
+        while(!Utilities.YNValidationChar(multiplayerChar))
+        {
+            multiplayerChar = ScannerInput.validNextChar("Please try again (Y or N) for multiplayer: ");
+        }
+
+        boolean test =appStoreAPI.updateGameApp(oldAppName,developer,name,size,version,cost,Utilities.YNtoBoolean(multiplayerChar));
+       System.out.println(Utilities.WasItSuccessful(test));
     }
+
+    private void updateEducationApp()
+    {
+        System.out.println(appStoreAPI.listAllEducationApps());
+        String oldAppName = ScannerInput.validNextLine("Please enter the app name to update: ");
+        while(!appStoreAPI.isValidAppName(oldAppName))
+        {
+            oldAppName = ScannerInput.validNextLine("Please enter a valid app name to update: ");
+        }
+        Developer developer = developerInput();
+        String name = appNameInput();
+        double size = appSizeInput();
+        double version = appVersionInput();
+        double cost = appCostInput();
+        int level = ScannerInput.validNextInt("Please enter the app level: ");
+        Utilities.validRange(level, 1, 1000);
+        while(!Utilities.validRange(level, 0, 10))
+        {
+            level = ScannerInput.validNextInt("Please enter a valid app size (1-1000 MB): ");
+        }
+        boolean test =appStoreAPI.updateEducationApp(oldAppName,developer,name,size,version,cost,level);
+        System.out.println(Utilities.WasItSuccessful(test));
+    }
+
+    private void updateProductivtyApp()
+    {
+        System.out.println(appStoreAPI.listAllProductivityApps());
+        String oldAppName = ScannerInput.validNextLine("Please enter the app name to update: ");
+        while(!appStoreAPI.isValidAppName(oldAppName))
+        {
+            oldAppName = ScannerInput.validNextLine("Please enter a valid app name to update: ");
+        }
+        Developer developer = developerInput();
+        String name = appNameInput();
+        double size = appSizeInput();
+        double version = appVersionInput();
+        double cost = appCostInput();
+
+        boolean test =appStoreAPI.updateProductivityApp(oldAppName,developer,name,size,version,cost);
+        System.out.println(Utilities.WasItSuccessful(test));
+    }
+
 
     private void  deleteApp()
     {
@@ -279,8 +406,46 @@ public class Driver {
 
     }
 
+//reports menu mangment
+private int ReportsMenu() {
+    System.out.println("""
+                 -------Developer Menu-------
+                |   1) Apps overview         |
+                |   2) Developers overview   |
+                |   0) RETURN to main menu   |
+                 ----------------------------""");
+    return ScannerInput.validNextInt("==>> ");
+}
 
 
+    private void runReportsMenu() {
+        int option = ReportsMenu();
+        while (option != 0) {
+            switch (option) {
+                case 1 -> appsOverview();
+                case 2 -> appsDevlopers();
+                default -> System.out.println("Invalid option entered" + option);
+            }
+            ScannerInput.validNextLine("\n Press the enter key to continue");
+            option = ReportsMenu();
+        }
+    }
+
+    public void  appsOverview()
+    {
+       if(appInSystem())
+       {
+           System.out.println(appStoreAPI.listSummaryOfAllApps());
+       }
+    }
+
+    public void  appsDevlopers()
+    {
+        if(appInSystem())
+        {
+            System.out.println(developerAPI.listDevelopers());
+        }
+    }
 
 
     //--------------------------------------------------
@@ -375,13 +540,14 @@ public class Driver {
     }
 
 
+
     private void searchAppsEqualOrAboveAStarRating()
     {
         if(appInSystem())
         {
             int star = ScannerInput.validNextInt("Please enter star rating: ");
 
-            while (Utilities.validRange(star, 1, 5))
+            while (!Utilities.validRange(star, 1, 5))
             {
                 star = ScannerInput.validNextInt("Please enter star rating: ");
             }

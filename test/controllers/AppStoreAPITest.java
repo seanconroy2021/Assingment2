@@ -560,6 +560,75 @@ public class AppStoreAPITest {
 
     }
 
+    @Nested
+    class UpdateMethods{
+
+
+
+        AppStoreAPI test = new AppStoreAPI();
+        GameApp app1 = new GameApp(developerKoolGames, "cooking", 1000, 2.0, 1.99,  true);
+        ProductivityApp app2 = new ProductivityApp(developerMicrosoft, "apple", 1000, 2.0, 1.99);
+        EducationApp app3 = new EducationApp(developerLego, "banna", 1000, 2.0, 1.99, 10);
+
+        @Test
+        void superUpdateAppTest()
+       {   test.addApp(app1);
+           test.updateApp("cooking",developerKoolGames, "newCooking1", 99, 3.0, 2);
+           assertEquals("newCooking1", app1.getAppName());
+           assertEquals(developerKoolGames, app1.getDeveloper());
+           assertEquals(99, app1.getAppSize());
+           assertEquals(3.0, app1.getAppVersion());
+           assertEquals(2, app1.getAppCost());
+
+
+       }
+
+       @Test
+        void updateEducationApp()
+       {
+            test.addApp(app3);
+           test.updateEducationApp(app3.getAppName(),developerKoolGames,"world",2,4.0,2.0,8 );
+           assertEquals("world", app3.getAppName());
+           assertEquals(developerKoolGames, app3.getDeveloper());
+           assertEquals(2, app3.getAppSize());
+           assertEquals(4.0, app3.getAppVersion());
+           assertEquals(2.0, app3.getAppCost());
+          assertEquals(8  ,((EducationApp) app3).getLevel());
+
+
+       }
+
+        @Test
+        void updateGameApp()
+        {
+            test.addApp(app1);test.addApp(app2); test.addApp(app3);
+            test.updateGameApp(app1.getAppName(),developerKoolGames,"gta",10,3.0,3.0,false );
+            assertEquals("gta", app1.getAppName());
+            assertEquals(developerKoolGames, app1.getDeveloper());
+            assertEquals(10, app1.getAppSize());
+            assertEquals(3.0, app1.getAppVersion());
+            assertEquals(3.0, app1.getAppCost());
+            assertFalse( ((GameApp) app1).isMultiplayer());
+
+        }
+
+        @Test
+        void updateProductivityApp()
+        {
+            test.addApp(app2);
+            test.updateProductivityApp(app2.getAppName(), developerMicrosoft, "apple2", 1000, 2.0, 4);
+            assertEquals("apple2", app2.getAppName());
+            assertEquals(developerMicrosoft, app2.getDeveloper());
+            assertEquals(1000, app2.getAppSize());
+            assertEquals(2.0, app1.getAppVersion());
+            assertEquals(4, app2.getAppCost());
+
+
+        }
+
+
+
+    }
     //--------------------------------------------
     // Helper Methods
     //--------------------------------------------

@@ -34,9 +34,9 @@ public class AppStoreAPI implements ISerializer {
     }
 
     /**
-     *
-     * @param appName
-     * @return
+     * This meethod find the app by name in the arraylsit
+     * @param appName this is the parameter it looking for.
+     * @return it return app if found and null otherwise.
      */
     public App getAppByName(String appName)
     {
@@ -409,6 +409,103 @@ public class AppStoreAPI implements ISerializer {
         }
     }
 
+    // update methods for apps( validation handled in driver
+
+    /**
+     * This method is used to update the app in the arraylist but only the super class parameters
+     * @param oldAppName This is the appName that your looking for in the arraylist.
+     * @param developer This is the type Developer that you would like to change in the app.
+     * @param name This is the type String name that you would like to change in the app.
+     * @param size This is the type double size that you would like to change in the app.
+     * @param version This is the type double version that you would like to change in the app.
+     * @param cost This is the type double cost that you would like to change in the app.
+     * @return true if successful and false otherwise
+     */
+    public boolean updateApp(String oldAppName, Developer developer, String name,double size, double version, double cost)
+    {
+          if (isValidAppName(oldAppName))
+          {
+              App app = getAppByName(oldAppName);
+
+              app.setDeveloper(developer);
+              app.setAppName(name);
+              app.setAppSize(size);
+              app.setAppVersion(version);
+              app.setAppCost(cost);
+              return true;
+          }
+          else
+          {
+              return false;
+          }
+    }
+
+    /**
+     * This method is used to update the education app in the arraylist it take in the level plus all super attributes
+     * @param oldAppName This is the appName that your looking for in the arraylist.
+     * @param developer This is the type Developer that you would like to change in the app.
+     * @param name This is the type String name that you would like to change in the app.
+     * @param size This is the type double size that you would like to change in the app.
+     * @param version This is the type double version that you would like to change in the app.
+     * @param cost This is the type double cost that you would like to change in the app.
+     * @param level This is the type int level that you would like to change in the app.
+     * @return true if successful and false otherwise
+     */
+    public boolean updateEducationApp(String oldAppName, Developer developer, String name,double size, double version, double cost, int level)
+    {
+
+
+             App app = getAppByName(oldAppName);
+            ((EducationApp)app).setLevel(level);
+            boolean test = updateApp(oldAppName,developer,name,size,version,cost);
+            if(test){return true;}
+            else{return false;}
+
+    }
+
+    /**
+     * This method is used to update the game app in the arraylist it take in the boolean multiplayer plus all super attributes.
+     * @param oldAppName This is the appName that your looking for in the arraylist.
+     * @param developer This is the type Developer that you would like to change in the app.
+     * @param name This is the type String name that you would like to change in the app.
+     * @param size This is the type double size that you would like to change in the app.
+     * @param version This is the type double version that you would like to change in the app.
+     * @param cost This is the type double cost that you would like to change in the app.
+     * @param multiplayer This is the type boolean multiplayer that you would like to change in the app.
+     * @return true if successful and false otherwise
+     */
+    public boolean updateGameApp(String oldAppName, Developer developer, String name,double size, double version, double cost, boolean multiplayer)
+    {
+
+
+            App app = getAppByName(oldAppName);
+            ((GameApp) app).setMultiplayer(multiplayer);
+            boolean test = updateApp(oldAppName,developer,name,size,version,cost);
+            if(test){return true;}
+            else{return false;}
+
+
+    }
+
+    /**
+     * This method is used to update the productivity app in the arraylist
+     * @param oldAppName This is the appName that your looking for in the arraylist.
+     * @param developer This is the type Developer that you would like to change in the app.
+     * @param name This is the type String name that you would like to change in the app.
+     * @param size This is the type double size that you would like to change in the app.
+     * @param version This is the type double version that you would like to change in the app.
+     * @param cost This is the type double cost that you would like to change in the app.
+     * @return true if successful and false otherwise
+     */
+
+    public boolean updateProductivityApp(String oldAppName, Developer developer, String name,double size, double version, double cost)
+    {
+       boolean  test = updateApp(oldAppName,developer,name,size,version,cost);
+
+        if(test){return true;}
+        else{return false;}
+
+    }
     /**
      *It builds  a string of all the recommended app in the system and return it.
      *
