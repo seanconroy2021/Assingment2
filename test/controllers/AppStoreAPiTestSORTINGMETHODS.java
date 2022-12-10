@@ -75,7 +75,7 @@ public class AppStoreAPiTestSORTINGMETHODS {
         appStore = emptyAppStore = null;
     }
 
-
+            @Test
              void sortByNameAscendingReOrdersList() {
             assertEquals(7, appStore.numberOfApps());
             //checks the order of the objects in the list

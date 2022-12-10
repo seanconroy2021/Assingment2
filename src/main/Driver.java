@@ -623,18 +623,26 @@ private int ReportsMenu() {
     private void saveAllData() {
 
         try {
-            appStoreAPI.load();
+            System.out.println("saving from file: " + appStoreAPI.fileName());
+            appStoreAPI.save();
+            System.out.println("saving from file: " + developerAPI.fileName());
+            developerAPI.save();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.err.println("Error reading from file: " + e);
         }
     }
 
     private void loadAllData() {
         try {
-            appStoreAPI.save();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+            System.out.println("Loading from file: " + appStoreAPI.fileName());
+            appStoreAPI.load();
+            System.out.println("Loading from file: " + developerAPI.fileName());
+            developerAPI.load();
+        }catch (Exception e) {
+                System.err.println("Error writing to file: " + e);
+            }
+
+
     }
 
 }
