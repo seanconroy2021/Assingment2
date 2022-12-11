@@ -190,6 +190,28 @@ public class AppStoreAPITest {
 
         }
 
+        @Test
+        void deletingAppByNameThatDoesNotExistReturnsNull()
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            GameApp app1 = new GameApp(developerKoolGames, "cooking", 1000, 2.0, 1.99,  true);
+            ProductivityApp app2 = new ProductivityApp(developerMicrosoft, "cooking", 1000, 2.0, 1.99);
+            test.addApp(app1);test.addApp(app2);
+            assertNull(test.deleteAppByName("HELLOWORLD"));
+
+        }
+
+        @Test
+        void deletingAppByNameThatDoesExistReturnsAPP()
+        {
+            AppStoreAPI test = new AppStoreAPI();
+            GameApp app1 = new GameApp(developerKoolGames, "cooking", 1000, 2.0, 1.99,  true);
+            ProductivityApp app2 = new ProductivityApp(developerMicrosoft, "cooking", 1000, 2.0, 1.99);
+            test.addApp(app1);test.addApp(app2);
+            assertEquals(app1 ,test.deleteAppByName("cooking") );
+
+        }
+
 
     }
 
@@ -288,6 +310,9 @@ public class AppStoreAPITest {
             assertTrue(test.listAllGameApps().contains("no game apps"));
 
         }
+
+
+
 
         @Test
         void listAllGameAppsWhenEmpty()

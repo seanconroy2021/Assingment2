@@ -1,16 +1,3 @@
 <object-stream>
-  <list>
-    <models.EducationApp>
-      <appName>apple</appName>
-      <appSize>1.0</appSize>
-      <appVersion>1.0</appVersion>
-      <appCost>1.0</appCost>
-      <developer>
-        <developerName>sean</developerName>
-        <developerWebsite>1</developerWebsite>
-      </developer>
-      <ratings/>
-      <level>1</level>
-    </models.EducationApp>
-  </list>
+  <list/>
 </object-stream>

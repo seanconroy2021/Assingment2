@@ -106,7 +106,7 @@ public class Driver {
                 |   1) Add a education app   |
                 |   2) Add a game app        |
                 |   3) Add a productivty app |
-                |   0) RETURN to main menu   |
+                |   0) RETURN to sub menu    |
                  ----------------------------""");
       return ScannerInput.validNextInt("==>> ");
 
@@ -149,7 +149,7 @@ public class Driver {
                 |   1) Update game app       |
                 |   2) Update education app  |
                 |   3) update productivty app|
-                |   0) RETURN to main menu   |
+                |   0) RETURN to sub menu    |
                  ----------------------------""");
         return ScannerInput.validNextInt("==>> ");
 
