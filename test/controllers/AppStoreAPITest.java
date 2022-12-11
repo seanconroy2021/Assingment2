@@ -197,7 +197,7 @@ public class AppStoreAPITest {
     class RandomGenerate
     {//
         @Test
-        void simulateRatingsChecker()//todo -check
+        void simulateRatingsChecker()
         {
             AppStoreAPI test = new AppStoreAPI();
             GameApp app1 = new GameApp(developerKoolGames, "cooking", 1000, 2.0, 1.99,  true);
